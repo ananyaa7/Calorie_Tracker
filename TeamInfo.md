@@ -10,8 +10,8 @@
 | Captain Email |  |
 | Member 1 Name | Brenda Hariyanto |
 | Member 1 Email | brendah5@illinois.edu |
-| Member 2 Name |  |
-| Member 2 Email |  |
+| Member 2 Name | Heet Parikh |
+| Member 2 Email | hparik5@illinois.edu |
 | Member 3 Name |  |
 | Member 3 Email |  |
 
