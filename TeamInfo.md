@@ -6,7 +6,7 @@
 | --- | --- |
 | TeamID | 016 |
 | TeamName  | SQL-Stars |
-| Captain Name | grk3 |
+| Captain Name | Gisella Kontaria |
 | Captain Email | grk3@illinois.edu |
 | Member 1 Name | Brenda Hariyanto |
 | Member 1 Email | brendah5@illinois.edu |
