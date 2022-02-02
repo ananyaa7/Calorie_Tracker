@@ -12,8 +12,8 @@
 | Member 1 Email | brendah5@illinois.edu |
 | Member 2 Name | Heet Parikh |
 | Member 2 Email | hparik5@illinois.edu |
-| Member 3 Name |  |
-| Member 3 Email |  |
+| Member 3 Name |  Ananya Agarwal|
+| Member 3 Email | ananyaa7@illinois.edu |
 
 ### Project Information
 
