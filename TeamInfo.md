@@ -6,14 +6,14 @@
 | --- | --- |
 | TeamID | 016 |
 | TeamName  | SQL-Stars |
-| Captain Name |  |
-| Captain Email |  |
+| Captain Name | grk3 |
+| Captain Email | grk3@illinois.edu |
 | Member 1 Name | Brenda Hariyanto |
 | Member 1 Email | brendah5@illinois.edu |
-| Member 2 Name | Heet Parikh |
-| Member 2 Email | hparik5@illinois.edu |
-| Member 3 Name |  Ananya Agarwal|
-| Member 3 Email | ananyaa7@illinois.edu |
+| Member 2 Name | Ananya Agarwal |
+| Member 2 Email | ananyaa7@illinois.edu | 
+| Member 3 Name | Heet Parikh |
+| Member 3 Email | hparik5@illinois.edu  |
 
 ### Project Information
 
