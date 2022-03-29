@@ -1,0 +1,67 @@
+.LogIn {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  
+  .button1 {
+    font-family: "Montserrat", sans-serif;
+    background-color: #12565a;
+    color: white;
+    padding: 3%;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 12px;
+    line-height: 15px;
+  }
+  
+  .button1:hover {
+    font-family: "Montserrat", sans-serif;
+    background-color: #11848a;
+  }
+  
+  .title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+    font-size: 45px;
+    line-height: 50px;
+    text-align: center;
+    color: #12565a;
+    margin-bottom: 6%;
+  }
+  
+  .SignRout {
+    width: 293px;
+    height: 22px;
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 13px;
+    line-height: 22px;
+  
+    text-align: center;
+    color: #12565a;
+    text-decoration: none;
+  }
+  .SignRout_b {
+    width: 293px;
+    height: 22px;
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 13px;
+    line-height: 22px;
+    align-items: center;
+    text-align: center;
+    color: #12565a;
+    text-decoration: none;
+  }
+  .SignRout_b:hover {
+    color: #11848a;
+  }
+  
+  Button{
+    background-color: #12565a;
+  }
