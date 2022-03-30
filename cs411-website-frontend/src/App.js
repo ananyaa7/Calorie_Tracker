@@ -5,6 +5,10 @@ import Navbar from "./Components/Navbar";
 import SignUp from './Pages/SignUp/SignUp';
 import Login from "./Pages/Login/Login";
 import Landing from "./Pages/Landing/Landing";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
 
 function App() {
   return (
