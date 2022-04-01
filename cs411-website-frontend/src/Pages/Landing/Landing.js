@@ -10,7 +10,7 @@ function Landing({ onLoginSuccessful }) {
   const [height, setHeight] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(""); 
-
+  const [sumCalories,setSumCalories] = useState(0);  
   const [below_100, setBelow_100] = useState(false);
   const [on_100_200,setOn_100_200] = useState(false);
   const [on_200_300, setOn_200_300] = useState(false);
@@ -23,6 +23,8 @@ function Landing({ onLoginSuccessful }) {
   const onHeightChange = (event) => setHeight(event.target.value);
   const onGenderChange = (event) => setGender(event.target.value);
   const onAgeChange = (event) => setAge(event.target.value);
+
+
   // const handleCheckBox = (event) => {console.log(event.target.value);}
   var BMI, BMR, totalCalories = 0;
   
@@ -94,12 +96,21 @@ function Landing({ onLoginSuccessful }) {
   function onRowSelect(row, isSelected){
     var rowStr = "";
     for(var prop in row){
+      console.log(prop)
         if (prop != "foodID" && prop != "foodName" && isSelected) {
-            totalCalories += parseInt(row[prop]);
+          totalCalories += parseInt(row[prop]);
+        }
+        else if(prop != "foodID" && prop != "foodName" && !isSelected)
+        {
+          totalCalories -= parseInt(row[prop]);
         }
     }
-    alert(this.selectedRowKeys + ", " + totalCalories);
+    
+    console.log(row["foodID"] + ", " + totalCalories);
   }
+
+
+
   // function clickHandler(text,isClicked)
   // {
   //       if(isClicked)
@@ -254,8 +265,9 @@ function Landing({ onLoginSuccessful }) {
               <TableHeaderColumn dataField="fiberCalories" dataAlign="center">Fiber Calories</TableHeaderColumn>
             </BootstrapTable>
             <br></br>
-            <h4>Total Order Calories: {totalCalories} </h4>
-            <Button variant="primary" type="submit"  onClick={() => this.getSelectedRows()}>
+            <h4>Total Order Calories: {sumCalories} </h4>
+            {/* <Button variant="primary" type="submit"  onClick={() => this.getSelectedRows()}> */}
+            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(sumCalories)}}>
               Submit Order
             </Button>
           </Form>
