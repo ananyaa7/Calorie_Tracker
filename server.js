@@ -32,23 +32,29 @@ app.get('/db', (req, res) => {
 });
 
 //Signup page
-app.post('/signup', async(req,res) => {
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var password = req.body.password;
+app.get('/signup', (req,res) => {
+    var userID = req.query.userID;
+    // var userID = req.body.userID;
+    var firstName = req.query.firstName;
+    // var firstName = req.body.firstName;
+    var lastName = req.query.lastName;
+    // var lastName = req.body.lastName;
+    var email = req.query.email;
+    // var email = req.body.email;
+    var password = req.query.password;
+    // var password = req.body.password;
 
-    conn.getConnection( async (err, connection) => {
+    conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT * FROM user WHERE email = ??"
+        const sqlSearch = "SELECT * FROM user WHERE email = ?"
         const search_query = mysql.format(sqlSearch, [email])
 
-        const sqlInsert = "INSERT INTO user VALUES (??, ??, ??, ??)"
-        const insert_query = mysql.format(sqlInsert,[firstName, lastName, email, password])
+        const sqlInsert = "INSERT INTO user VALUES (?, ?, ?, ?, ?)"
+        const insert_query = mysql.format(sqlInsert,[userID, firstName, lastName, email, password])
 
-        await connection.query (search_query, async (err, result) => {
+        connection.query (search_query, async (err, result) => {
 
             if (err) throw (err)
             console.log("--> Search Results")
@@ -59,7 +65,7 @@ app.post('/signup', async(req,res) => {
                 console.log("--> User already exists")
                 res.sendStatus(409)
             } else {
-                await connection.query (insert_query, (err,result) => {
+                connection.query (insert_query, (err,result) => {
                     connection.release()
 
                     if (err) throw (err)
