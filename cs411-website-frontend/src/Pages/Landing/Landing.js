@@ -101,7 +101,6 @@ function Landing({ onLoginSuccessful }) {
   };
 
   function onRowSelect(row, isSelected){
-    var rowStr = "";
     for(var prop in row){
       console.log(prop)
         if (prop != "foodID" && prop != "foodName" && isSelected) {
@@ -117,6 +116,18 @@ function Landing({ onLoginSuccessful }) {
   }
 
   function clearHistory() {}
+
+  function generateHistory() {}
+
+  function generateSummary() {
+    var summary = "";
+    if (BMR - totalCalories < 0) {
+      summary += "deficit";
+    } else {
+      summary += "surplus";
+    }
+    return summary;
+  }
 
   // function clickHandler(text,isClicked)
   // {
@@ -273,7 +284,7 @@ function Landing({ onLoginSuccessful }) {
             </BootstrapTable>
             <br></br>
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(sumCalories)}}>
+            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(sumCalories); generateSummary()}}>
               Submit Order
             </Button>
           </Form>
@@ -282,8 +293,8 @@ function Landing({ onLoginSuccessful }) {
       <Card className="mt-5">
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
-            <h4>You are kcal short of your required daily intake.</h4>
-            <Button variant="primary" onClick={handleShow}>
+            <h4>You are on {BMR - totalCalories} kcal {generateSummary()}</h4>
+            <Button variant="primary" onClick={() => {generateHistory(); handleShow()}}>
               View History
             </Button>
 
@@ -308,7 +319,7 @@ function Landing({ onLoginSuccessful }) {
                 </Button>
               </Modal.Footer>
             </Modal>
-            <h4>We recommend the following exercises that best fit your health record:</h4>
+            {/* <h4>We recommend the following exercises that best fit your health record:</h4> */}
         </Card.Body>
       </Card>
     </Container>
