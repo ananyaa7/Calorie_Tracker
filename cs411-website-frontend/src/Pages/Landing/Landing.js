@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Container, Form, Button, Alert, Card, Dropdown, Row } from "react-bootstrap";
+import { Container, Form, Button, Alert, Card, Dropdown, Row, Modal } from "react-bootstrap";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TextField from "@mui/material/TextField";
 
@@ -18,6 +18,9 @@ function Landing({ onLoginSuccessful }) {
   const [carbs,setCarbs] = useState(false);
   const [protein,setProtein] = useState(false);
   const [fiber,setFiber] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
@@ -25,8 +28,12 @@ function Landing({ onLoginSuccessful }) {
   const onAgeChange = (event) => setAge(event.target.value);
 
 
-  // const handleCheckBox = (event) => {console.log(event.target.value);}
-  var BMI, BMR, totalCalories = 0;
+  var BMI = 0;
+  var minBMI = 0;
+  var maxBMI = 0;
+  var avgBMI = 0;
+  var BMR = 0;
+  var totalCalories = 0;
   
   const calculateStats = async(event) => {
     BMI = weight / (height * height);
@@ -109,7 +116,7 @@ function Landing({ onLoginSuccessful }) {
     console.log(row["foodID"] + ", " + totalCalories);
   }
 
-
+  function clearHistory() {}
 
   // function clickHandler(text,isClicked)
   // {
@@ -266,11 +273,42 @@ function Landing({ onLoginSuccessful }) {
             </BootstrapTable>
             <br></br>
             <h4>Total Order Calories: {sumCalories} </h4>
-            {/* <Button variant="primary" type="submit"  onClick={() => this.getSelectedRows()}> */}
             <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(sumCalories)}}>
               Submit Order
             </Button>
           </Form>
+        </Card.Body>
+      </Card>
+      <Card className="mt-5">
+        <Card.Header as="h2">Step 3: Summary</Card.Header>
+        <Card.Body>
+            <h4>You are kcal short of your required daily intake.</h4>
+            <Button variant="primary" onClick={handleShow}>
+              View History
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>History</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Highest BMI: {maxBMI}
+                <br></br> 
+                Lowest BMI: {minBMI}
+                <br></br> 
+                Average BMI: {avgBMI}
+                <br></br> 
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={clearHistory}>
+                  Clear History
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <h4>We recommend the following exercises that best fit your health record:</h4>
         </Card.Body>
       </Card>
     </Container>
