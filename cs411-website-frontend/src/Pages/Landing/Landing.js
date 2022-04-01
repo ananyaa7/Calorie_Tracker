@@ -11,6 +11,8 @@ function Landing({ onLoginSuccessful }) {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(""); 
   const [sumCalories,setSumCalories] = useState(0);  
+  const [bmi, setBmi] = useState(0);
+  const [bmr, setBmr] = useState(0);
   const [below_100, setBelow_100] = useState(false);
   const [on_100_200,setOn_100_200] = useState(false);
   const [on_200_300, setOn_200_300] = useState(false);
@@ -35,7 +37,7 @@ function Landing({ onLoginSuccessful }) {
   var BMR = 0;
   var totalCalories = 0;
   
-  const calculateStats = async(event) => {
+  const calculateStats = () => {
     BMI = weight / (height * height);
 
     if (gender == "M") {
@@ -44,12 +46,18 @@ function Landing({ onLoginSuccessful }) {
     if (gender == "F") {
         BMR =  447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
     }
+    setBmi(BMI);
+    setBmr(BMR);
+
   }
   
-  const onSubmit = async (event) => {
+  const onStatSubmit = (e) => {
     calculateStats();
+    e.preventDefault();
   };
 
+
+  const onFilterSubmit = () => {};
 
   const columns = [{
     dataField: 'foodID',
@@ -121,7 +129,7 @@ function Landing({ onLoginSuccessful }) {
 
   function generateSummary() {
     var summary = "";
-    if (BMR - totalCalories < 0) {
+    if (bmr - sumCalories < 0) {
       summary += "deficit";
     } else {
       summary += "surplus";
@@ -146,6 +154,8 @@ function Landing({ onLoginSuccessful }) {
     if(carbs)console.log("carbs is clicked");
     if(protein)console.log("protein is clicked");
     if(fiber)console.log("fiber is clicked");
+    console.log("im in inform"+bmi);
+    console.log("im in inform"+bmr);
 
 
   }
@@ -158,7 +168,7 @@ function Landing({ onLoginSuccessful }) {
         <Card.Header as="h1">Calories Tracker</Card.Header>
         <Card.Header as="h2">Step 1: Enter Stats</Card.Header>
         <Card.Body>
-          <Form className="w-100" onSubmit={onSubmit}>
+          <Form className="w-100" onSubmit={onStatSubmit}>
             <Form.Group controlId="weight">
               <Form.Label>Weight</Form.Label>
               <Form.Control
@@ -206,9 +216,9 @@ function Landing({ onLoginSuccessful }) {
       </Card>
       <Card className="mt-5">
         <Card.Header as="h2">Step 2: Select Foods</Card.Header>
-        <Card.Header as="h3">You need {BMR} calories per day</Card.Header>
+        <Card.Header as="h3">You need {bmr} calories per day</Card.Header>
         <Card.Body>
-          <Form className="w-100" onSubmit={onSubmit}>
+          <Form className="w-100">
 
           <Dropdown className="d-inline mx-2">
             <Dropdown.Toggle id="dropdown-autoclose-true">
@@ -284,7 +294,7 @@ function Landing({ onLoginSuccessful }) {
             </BootstrapTable>
             <br></br>
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(sumCalories); generateSummary()}}>
+            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(bmi);console.log(bmr);  generateSummary()}}>
               Submit Order
             </Button>
           </Form>
@@ -293,7 +303,7 @@ function Landing({ onLoginSuccessful }) {
       <Card className="mt-5">
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
-            <h4>You are on {BMR - totalCalories} kcal {generateSummary()}</h4>
+            <h4>You are on {bmr - sumCalories} kcal {generateSummary()}</h4>
             <Button variant="primary" onClick={() => {generateHistory(); handleShow()}}>
               View History
             </Button>
