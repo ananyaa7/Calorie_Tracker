@@ -5,20 +5,25 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TextField from "@mui/material/TextField";
 
 
-
-// import { login } from "../../api";
-
 function Landing({ onLoginSuccessful }) {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState(""); 
 
+  const [below_100, setBelow_100] = useState(false);
+  const [on_100_200,setOn_100_200] = useState(false);
+  const [on_200_300, setOn_200_300] = useState(false);
+  const [on_300_above, setOn_300_above] = useState(false);
+  const [carbs,setCarbs] = useState(false);
+  const [protein,setProtein] = useState(false);
+  const [fiber,setFiber] = useState(false);
+
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
   const onGenderChange = (event) => setGender(event.target.value);
   const onAgeChange = (event) => setAge(event.target.value);
-
+  // const handleCheckBox = (event) => {console.log(event.target.value);}
   var BMI, BMR, totalCalories = 0;
   
   const calculateStats = async(event) => {
@@ -36,10 +41,6 @@ function Landing({ onLoginSuccessful }) {
     calculateStats();
   };
 
-//   const [inputText, setInputText] = useState("");
-//   const inputHandler = (event) => {
-//       setInputText(event.target.value.toLowerCase());
-//   };
 
   const columns = [{
     dataField: 'foodID',
@@ -89,20 +90,36 @@ function Landing({ onLoginSuccessful }) {
     clickToSelect: true,
     onSelect: onRowSelect
   };
-//   return this.refs.table.state.selectedRowKeys;
+
   function onRowSelect(row, isSelected){
     var rowStr = "";
-   
     for(var prop in row){
         if (prop != "foodID" && prop != "foodName" && isSelected) {
             totalCalories += parseInt(row[prop]);
         }
-    //   rowStr+=this.selectedRowKeys+": '"+row[prop]+"' ";
     }
-    
     alert(this.selectedRowKeys + ", " + totalCalories);
   }
+  // function clickHandler(text,isClicked)
+  // {
+  //       if(isClicked)
+  //       console.log(text+"clicked");
+  //       else
+  //       console.log(text+"unclicked");
+  // }
 
+  function informationState()
+  {
+    if(below_100)console.log("100 is clicked");
+    if(on_100_200)console.log("on_100_200 is clicked");
+    if(on_200_300)console.log("on_200_300 is clicked");
+    if(on_300_above)console.log("on_300_above is clicked");
+    if(carbs)console.log("carbs is clicked");
+    if(protein)console.log("protein is clicked");
+    if(fiber)console.log("fiber is clicked");
+
+
+  }
   return (
     <Container>
     <Button variant="secondary" type="submit">
@@ -174,18 +191,21 @@ function Landing({ onLoginSuccessful }) {
                 <Form.Check 
                     type='checkbox'
                     label='High Carbohydate'
+                    onChange = {() => {setCarbs(!carbs)}}
                 />
               </Form>
               <Form>
                 <Form.Check 
                     type='checkbox'
                     label='High Protein'
+                    onChange = {() => {setProtein(!protein)}}
                 />
               </Form>
               <Form>
                 <Form.Check 
                     type='checkbox'
                     label='High Fiber'
+                    onChange = {() => {setFiber(!fiber)}}
                 />
               </Form>
 
@@ -194,41 +214,38 @@ function Landing({ onLoginSuccessful }) {
                 <Form.Check 
                     type='checkbox'
                     label='Below 100 kcal'
+                    onChange = {() => {setBelow_100(!below_100)}}
+                    
                 />
               </Form>
               <Form>
                 <Form.Check 
                     type='checkbox'
                     label='100 - 200 kcal'
+                    onChange = {() => {setOn_100_200(!on_100_200)}}
                 />
               </Form>
               <Form>
                 <Form.Check 
                     type='checkbox'
                     label='200 - 300 kcal'
+                    onChange = {() => {setOn_200_300(!on_200_300)}}
                 />
               </Form>
               <Form>
                 <Form.Check 
                     type='checkbox'
                     label='Above 300 kcal'
+                    onChange = {() => {setOn_300_above(!on_300_above)}}
                 />
               </Form>
 
-              <Button variant="success" size="sm" type="submit">
-                Apply Filter
+              <Button variant="success" size="sm"  onClick = {()=>informationState()}>
+                 Apply
               </Button>
             </Dropdown.Menu>
           </Dropdown>
-          {/* <div className="search d-inline mx-2">
-            <TextField
-            id="outlined-basic"
-            variant="outlined"
-            label="Search"
-            onChange={inputHandler}
-            />
-          </div>
-          <br></br> */}
+        
             <BootstrapTable selectRow={ selectRowProp } search={ {searchFormatted: true} } data={foods} striped={true} hover={true}>
               <TableHeaderColumn dataField="foodID" isKey={true} dataAlign="center" dataSort={true}>ID</TableHeaderColumn>
               <TableHeaderColumn dataField="foodName" dataAlign="center">Food Name</TableHeaderColumn>
@@ -238,7 +255,7 @@ function Landing({ onLoginSuccessful }) {
             </BootstrapTable>
             <br></br>
             <h4>Total Order Calories: {totalCalories} </h4>
-            <Button variant="primary" type="submit" onClick={() => this.getSelectedRows()}>
+            <Button variant="primary" type="submit"  onClick={() => this.getSelectedRows()}>
               Submit Order
             </Button>
           </Form>
