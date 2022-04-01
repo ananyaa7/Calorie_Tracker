@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -38,13 +37,7 @@ const SignUp = () => {
     <div className="SignUp">
       <form className={classes.root}>
         <h className="title">Food Calculator</h>
-        <TextField
-          label="Username"
-          variant="outlined"
-          required
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+       
         <TextField
           label="Email"
           variant="outlined"

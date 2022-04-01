@@ -110,15 +110,6 @@ function Landing({ onLoginSuccessful }) {
   }
 
 
-
-  // function clickHandler(text,isClicked)
-  // {
-  //       if(isClicked)
-  //       console.log(text+"clicked");
-  //       else
-  //       console.log(text+"unclicked");
-  // }
-
   function informationState()
   {
     if(below_100)console.log("100 is clicked");
