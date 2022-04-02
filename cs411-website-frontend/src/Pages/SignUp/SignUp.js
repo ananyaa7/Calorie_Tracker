@@ -43,7 +43,7 @@ const SignUp = () => {
         <TextField
           label="First Name"
           variant="outlined"
-          type="firstName"
+          type="text"
           required
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -51,7 +51,7 @@ const SignUp = () => {
         <TextField
           label="Last Name"
           variant="outlined"
-          type="lastName"
+          type="text"
           required
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}

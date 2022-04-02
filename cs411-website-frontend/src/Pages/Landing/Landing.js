@@ -172,30 +172,33 @@ function Landing({ onLoginSuccessful }) {
             <Form.Group controlId="weight">
               <Form.Label>Weight</Form.Label>
               <Form.Control
-                type="weight"
+                type="number"
                 placeholder="Enter weight in kg"
                 onChange={onWeightChange}
                 value={weight}
+                required
               />
             </Form.Group>
 
             <Form.Group controlId="height">
               <Form.Label>Height</Form.Label>
               <Form.Control
-                type="height"
+                type="number"
                 placeholder="Enter height in cm"
                 onChange={onHeightChange}
                 value={height}
+                required
               />
             </Form.Group>
 
             <Form.Group controlId="Age">
               <Form.Label>Age</Form.Label>
               <Form.Control
-                type="age"
+                type="number"
                 placeholder="Enter age in years"
                 onChange={onAgeChange}
                 value={age}
+                required
               />
             </Form.Group>
 
