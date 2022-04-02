@@ -130,9 +130,9 @@ function Landing({ onLoginSuccessful }) {
   function generateSummary() {
     var summary = "";
     if (bmr - sumCalories < 0) {
-      summary += "deficit";
-    } else {
       summary += "surplus";
+    } else {
+      summary += "deficit";
     }
     return summary;
   }
