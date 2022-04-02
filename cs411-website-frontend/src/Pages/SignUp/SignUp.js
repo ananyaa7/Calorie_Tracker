@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import axios from 'axios';
 import "./SignUp.css";
 
 import { Link } from "react-router-dom";
@@ -28,11 +29,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const SignUp = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  var handleSignup = () => {
+    let body = {
+      "firstName": "Heet",
+      "lastName": "Parikh",
+      "email": email,
+      "password": password
+    }
+    axios.post("http://localhost:8000/signup", body).then((res) => {
+      setEmail(res.data.email)
+      setPassword(res.data.password)
+    })
+  }
   return (
     <div className="SignUp">
       <form className={classes.root}>
@@ -56,7 +71,7 @@ const SignUp = () => {
         />
 
         <div>
-          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} >
+          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} onClick = {handleSignup} >
             Sign Up
           </Button>
 
