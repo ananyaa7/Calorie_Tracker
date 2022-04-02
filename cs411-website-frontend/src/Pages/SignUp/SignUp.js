@@ -32,12 +32,30 @@ const SignUp = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   return (
     <div className="SignUp">
       <form className={classes.root}>
-        <h className="title">Food Calculator</h>
+        <h className="title">Calories Tracker</h>
        
+        <TextField
+          label="First Name"
+          variant="outlined"
+          type="firstName"
+          required
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <TextField
+          label="Last Name"
+          variant="outlined"
+          type="lastName"
+          required
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
         <TextField
           label="Email"
           variant="outlined"
