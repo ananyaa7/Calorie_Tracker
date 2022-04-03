@@ -127,7 +127,7 @@ app.post("/login", (req, res)=> {
 
 //Submit Stats button for health_record
 app.post("/submitstats", (req, res) => {
-    var healthUserID = req.body.healthUserID;
+    var healthUserID = global_userID;
     var weight = req.body.weight;
     var height = req.body.height;
     var gender = req.body.gender;
@@ -137,13 +137,15 @@ app.post("/submitstats", (req, res) => {
     var curr_date = req.body.curr_date;
 
     //Query to insert information to the health_record table
-    var sqlInsert2 = "INSERT INTO health_record VALUES (?,?,?,?,?,?,?,?)"
-    var insert_health_query = mysql.format(sqlInsert2, [healthUserID,gender,weight,height,BMI,BMR,CaloriesNeeded,curr_date])
+    var sqlInsert2 = "INSERT INTO health_record VALUES (NULL, ?,?,?,?,?,?,?,?)"
+    var insert_health_query = mysql.format(sqlInsert2, [healthUserID, gender, weight, height, BMI, BMR, CaloriesNeeded, curr_date])
+    console.log(insert_health_query)
+
     conn.getConnection((err, connection) => {
         if(err) throw (err)
         connection.query(insert_health_query, (err,result) => {
             connection.release()
-
+            // console.log(result)
             //error checking to check for a successful insertion
             if(err) throw (err)
             console.log("--> Created new Health Record")

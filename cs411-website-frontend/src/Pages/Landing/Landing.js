@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Alert, Card, Dropdown, Row, Modal } from "react-bootstrap";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TextField from "@mui/material/TextField";
+import axios from 'axios';
 
 
 function Landing({ onLoginSuccessful }) {
@@ -38,8 +39,7 @@ function Landing({ onLoginSuccessful }) {
   var totalCalories = 0;
   
   const calculateStats = () => {
-    BMI = weight / (height * height);
-
+    BMI = weight / ((height/100) * (height/100));
     if (gender == "M") {
         BMR =  88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
     }
@@ -47,15 +47,35 @@ function Landing({ onLoginSuccessful }) {
         BMR =  447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
     }
     setBmi(BMI);
+    console.log(BMI);
     setBmr(BMR);
 
   }
   
-  const onStatSubmit = (e) => {
+  var onStatSubmit = (e) => {
     calculateStats();
     e.preventDefault();
-  };
 
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    today = mm + '/' + dd + '/' + yyyy;
+    console.log(BMI)
+
+    let body = {
+      "gender": gender,
+      "weight": weight,
+      "height": height,
+      "BMI": bmi,
+      "BMR": bmr,
+      "CaloriesNeeded": bmr,
+      "curr_date": today
+    }
+    axios.post("http://localhost:8000/submitstats", body).then((res) => {
+        console.log(res.status);
+    })
+  }
 
   const onFilterSubmit = () => {};
 
