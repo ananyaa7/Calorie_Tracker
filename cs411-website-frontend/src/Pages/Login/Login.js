@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core";
 import "./Login.css";
 
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,15 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    var handleLogin = () => {
+      let body = {
+        "email": email,
+        "password": password
+      }
+      axios.post("http://localhost:8000/login",body).then((res) => {
+        console.log(res.status);
+      })
+    }
     return(
     <div className="LogIn">
       <form className={classes.root}>
@@ -55,7 +65,7 @@ const Login = () => {
         />
 
         <div>
-          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} >
+          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} onClick = {handleLogin} >
             Log In
           </Button>
 

@@ -40,14 +40,13 @@ const SignUp = () => {
 
   var handleSignup = () => {
     let body = {
-      "firstName": "Heet",
-      "lastName": "Parikh",
+      "firstName": firstName,
+      "lastName": lastName,
       "email": email,
       "password": password
     }
     axios.post("http://localhost:8000/signup", body).then((res) => {
-      setEmail(res.data.email)
-      setPassword(res.data.password)
+        console.log(res.status);
     })
   }
   return (
