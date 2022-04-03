@@ -47,8 +47,7 @@ app.get('/db', (req, res) => {
 // global variable
 var global_userID;
 
-//Signup page 
-//install bcrypt -> npm i bcrypt
+//Signup page
 app.post('/signup', (req,res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
@@ -167,7 +166,6 @@ app.post('/clearhistory', (req,res) => {
 
         const sqlSearch = "DELETE FROM health_record WHERE healthUserID = ?;"
         const search_query1 = mysql.format(sqlSearch, [healthUserID])
-
         connection.query (search_query1, async (err, result) => {
 
             if (err) throw (err)
@@ -195,7 +193,6 @@ app.post('/clearhistory', (req,res) => {
 //Submit Order button
 app.get('/submitorder', (req,res) => {
     var foodName = req.query.foodName;
-    
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
@@ -241,6 +238,89 @@ app.get("/viewhistory", (req, res) => {
 
 //To-do:
 //1. Add Code for filter button:
+
+// Apply filter button APIs
+
+//High Carbohydrate filter
+app.get('/highcarbohydrate', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+//High Protein filter
+app.get('/highprotein', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+//High Fiber filter
+app.get('/highfiber', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.fiberCalories > (SELECT AVG(f2.fiberCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+//High Calories (> 300 kCal)
+app.get('/highcalories', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
 
 
 var http = require('http').Server(app);
