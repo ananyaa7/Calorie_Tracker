@@ -44,6 +44,9 @@ app.get('/db', (req, res) => {
     });
 });
 
+// global variable
+var global_userID;
+
 //Signup page 
 //install bcrypt -> npm i bcrypt
 app.post('/signup', (req,res) => {
@@ -77,6 +80,7 @@ app.post('/signup', (req,res) => {
                     if (err) throw (err)
                     console.log ("--> Created new User")
                     console.log(result.insertId)
+                    global_userID = result.insertId;
                     res.sendStatus(201)
                 })
             }
@@ -97,7 +101,6 @@ app.post("/login", (req, res)=> {
       connection.release()
       
       if (err) throw (err)
-      console.log(result)
       if (result.length == 0) {
        console.log("--------> User does not exist")
        res.sendStatus(404)
@@ -105,10 +108,12 @@ app.post("/login", (req, res)=> {
       else {
          const hashedPassword = result[0].pass
          console.log(result)
-         console.log(password)
+        //  console.log(result[0].pass)
+        //  console.log(result[0].userID)
         if (password === hashedPassword) {
-        console.log("---------> Login Successful")
-        res.send(`${email} is logged in!`)
+            console.log("---------> Login Successful")
+            global_userID = result[0].userID
+            res.send(`${email} is logged in!`)
         }
         else {
         console.log("---------> Password Incorrect")

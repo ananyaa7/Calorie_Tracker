@@ -38,7 +38,8 @@ const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  var handleSignup = () => {
+  var handleSignup = (e) => {
+    e.preventDefault();
     let body = {
       "firstName": firstName,
       "lastName": lastName,

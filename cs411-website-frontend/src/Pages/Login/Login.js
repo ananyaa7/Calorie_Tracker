@@ -33,7 +33,8 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    var handleLogin = () => {
+    var handleLogin = (e) => {
+      e.preventDefault();
       let body = {
         "email": email,
         "password": password
@@ -74,7 +75,7 @@ const Login = () => {
             Don't have an account?
             <Link className="SignRout_b" to="/SignUp">
               {" "}
-              Log-In
+              Sign-Up
             </Link>
           </p>
         </div>
