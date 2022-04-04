@@ -51,7 +51,6 @@ var global_healthID;
 
 /* SIGN UP PAGE */
 
-//install bcrypt -> npm i bcrypt
 app.post('/signup', (req,res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
@@ -161,9 +160,10 @@ app.post("/submitstats", (req, res) => {
     })
 })
 
-app.get('/getfoodtable', (req,res) => {
+app.get('/getfoodtable', (req,res) => {})
+
+app.get('/submitorder', (req,res) => {
     var foodName = req.query.foodName;
-    
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
@@ -265,8 +265,85 @@ app.post('/clearhistory', (req,res) => {
     })
 })
 
-//To-do:
-//1. Add Code for filter button:
+/* FILTERS */
+
+app.get('/highcarbohydrate', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+app.get('/highprotein', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+app.get('/highfiber', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.fiberCalories > (SELECT AVG(f2.fiberCalories) From Food f2);"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+//High Calories (> 300 kCal) STILL NOT WORKING
+app.get('/highcalories', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
 
 
 var http = require('http').Server(app);
