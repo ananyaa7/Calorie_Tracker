@@ -1,8 +1,5 @@
-
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Card, Dropdown, Row, Modal } from "react-bootstrap";
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import TextField from "@mui/material/TextField";
 import axios from 'axios';
 import "./Landing.css";
 
@@ -224,6 +221,8 @@ function Landing({ onLoginSuccessful }) {
       <Card className="mt-5">
         <Card.Header as="h1">Calories Tracker</Card.Header>
         <Card.Header as="h2">Step 1: Enter Stats</Card.Header>
+
+        {/* STAGE 1 : ENTER STATS */}
         <Card.Body>
           <Form className="w-100" onSubmit={onStatSubmit}>
             <Form.Group controlId="weight">
@@ -274,12 +273,16 @@ function Landing({ onLoginSuccessful }) {
           </Form>
         </Card.Body>
       </Card>
+
+      {/* STAGE 2 : ORDER */}
+
       <Card className="mt-5">
         <Card.Header as="h2">Step 2: Select Foods</Card.Header>
         <Card.Header as="h3">You need {bmr} calories per day</Card.Header>
         <Card.Body>
           <Form className="w-100">
 
+          {/* FILTERS */}
           <Dropdown className="d-inline mx-2">
             <Dropdown.Toggle id="dropdown-autoclose-true">
               Select Filter
@@ -345,14 +348,9 @@ function Landing({ onLoginSuccessful }) {
             </Dropdown.Menu>
           </Dropdown>
     
-            {/* <BootstrapTable selectRow={ selectRowProp } search={ {searchFormatted: true} } data={foods} striped={true} hover={true}>
-              <TableHeaderColumn dataField="foodID" isKey={true} dataAlign="center" dataSort={true}>ID</TableHeaderColumn>
-              <TableHeaderColumn dataField="foodName" dataAlign="center">Food Name</TableHeaderColumn>
-              <TableHeaderColumn dataField="carbsCalories" dataAlign="center">Carbs Calories</TableHeaderColumn>
-              <TableHeaderColumn dataField="proteinCalories" dataAlign="center">Protein Calories</TableHeaderColumn>
-              <TableHeaderColumn dataField="fiberCalories" dataAlign="center">Fiber Calories</TableHeaderColumn>
-            </BootstrapTable> */}
-
+          {/* INSERT SEARCH BAR */}
+          
+          {/* FOOD TABLE */}
             <table className="table is-striped is-fullwidth" id="foodTable">
                 <thead>
                     <tr>
@@ -375,8 +373,8 @@ function Landing({ onLoginSuccessful }) {
                     )) }
                 </tbody>
             </table>
-
             <br></br>
+
             <h4>Total Order Calories: {sumCalories} </h4>
             <Button variant="primary" onClick={() => {console.log(bmi);console.log(bmr); getSelected(); 
                 generateSummary(); onOrderSubmit()}}>
@@ -384,6 +382,8 @@ function Landing({ onLoginSuccessful }) {
             </Button>
           </Form>
         </Card.Body>
+      
+      {/* STAGE 3 : SUMMARY */}
       </Card>
       <Card className="mt-5">
         <Card.Header as="h2">Step 3: Summary</Card.Header>
@@ -392,7 +392,8 @@ function Landing({ onLoginSuccessful }) {
             <Button variant="primary" onClick={() => {onViewHistory(); handleShow()}}>
               View History
             </Button>
-
+            
+            {/* HISTORY POP UP */}
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>History</Modal.Title>
