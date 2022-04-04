@@ -44,10 +44,13 @@ app.get('/db', (req, res) => {
     });
 });
 
-// global variable
-var global_userID;
+/* GLOBAL VARIABLES */
 
-//Signup page 
+var global_userID;
+var global_healthID;
+
+/* SIGN UP PAGE */
+
 //install bcrypt -> npm i bcrypt
 app.post('/signup', (req,res) => {
     const firstName = req.body.firstName;
@@ -88,7 +91,8 @@ app.post('/signup', (req,res) => {
     }) // end of db.getConnection()
 }) // end of app.post()
 
-//LOGIN (AUTHENTICATE USER)
+/* LOGIN PAGE */
+
 app.post("/login", (req, res)=> {
     const email = req.body.email
     const password = req.body.password
@@ -125,7 +129,8 @@ app.post("/login", (req, res)=> {
     }) //end of db.connection()
     }) //end of app.post()
 
-//Submit Stats button for health_record
+/* LANDING PAGE */
+
 app.post("/submitstats", (req, res) => {
     var healthUserID = global_userID;
     var weight = req.body.weight;
@@ -150,50 +155,13 @@ app.post("/submitstats", (req, res) => {
             if(err) throw (err)
             console.log("--> Created new Health Record")
             console.log(result.insertId)
+            global_healthID = result.insertId
             res.sendStatus(201)
         })
     })
 })
 
-
-
-//Clear History button
-app.post('/clearhistory', (req,res) => {
-    var healthUserID = req.body.healthUserID;
-
-    conn.getConnection( (err, connection) => {
-
-        if (err) throw (err)
-
-        const sqlSearch = "DELETE FROM health_record WHERE healthUserID = ?;"
-        const search_query1 = mysql.format(sqlSearch, [healthUserID])
-
-        connection.query (search_query1, async (err, result) => {
-
-            if (err) throw (err)
-            console.log("--> Search Results")
-            console.log(result.length)
-
-            if (result.length != 0) {
-                connection.release()
-                console.log("--> User already deleted")
-                res.sendStatus(409)
-            } else {
-                connection.query (insert_query, (err,result) => {
-                    connection.release()
-
-                    if (err) throw (err)
-                    console.log('Deleted Row(s):', result.affectedRows);
-                    res.sendStatus(201)
-                })
-            }
-        })
-
-    })
-})
-
-//Submit Order button
-app.get('/submitorder', (req,res) => {
+app.get('/getfoodtable', (req,res) => {
     var foodName = req.query.foodName;
     
     conn.getConnection( (err, connection) => {
@@ -212,32 +180,90 @@ app.get('/submitorder', (req,res) => {
     })
 })
 
+app.post("/submitorder", (req, res) => {
+    var orderHealthID = global_healthID;
+    var totalOrderCalories = req.body.totalOrderCalories;
+    var userID = global_userID;
 
-//View History Button
-app.get("/viewhistory", (req, res) => {
-    var firstName = req.query.firstName;
-    var lastName = req.query.lastName;
-    var maxBMI = req.query.maxBMI;
-    var minBMI = req.query.minBMI;
-    var avgBMI = req.query.avgBMI;
+    var query = "INSERT INTO order_record VALUES (NULL, ?, ?, ?)"
+    var sql_query = mysql.format(query, [orderHealthID, totalOrderCalories, userID])
+    console.log(sql_query)
 
-    //Query to view information from the health_record table
-    var sqlSearch2 = "SELECT firstName, lastName, MAX(BMI) as maxBMI, MIN(BMI) as minBMI, AVG(BMI) as avgBMI FROM health_record JOIN user ON (healthUserID = userID) GROUP BY healthUserID HAVING healthUserID = 1"
-    var search_query3 = mysql.format(sqlSearch2, [firstName,lastName,maxBMI,minBMI,avgBMI])
     conn.getConnection((err, connection) => {
-
-        connection.query(search_query3, (err,result) => {
+        if(err) throw (err)
+        connection.query(sql_query, (err,result) => {
             connection.release()
-
+            console.log(result)
             //error checking to check for a successful insertion
             if(err) throw (err)
-            console.log("--> Search results")
-            console.log(result)
+            console.log("--> Created new order record")
+            console.log(result.insertId)
+            res.sendStatus(201)
         })
     })
 })
 
+app.get("/gethistory", (req, res) => {
+    var healthUserID = global_userID;
 
+    var query = 'SELECT MAX(BMI) as maxBMI, MIN(BMI) as minBMI, AVG(BMI) as avgBMI FROM health_record JOIN user ON (healthUserID = userID) GROUP BY healthUserID HAVING healthUserID = ?';
+    var sql_query = mysql.format(query, [healthUserID])
+    console.log(sql_query)
+    conn.query(sql_query, function(error,results) {
+        console.log("--> History result")
+        if (error) {res.send(error);}
+        else {
+            // res.json(results[0].maxBMI);
+            // res.json(results[0].minBMI);
+            // res.json(results[0].avgBMI);
+
+            // console.log(results[0].maxBMI)
+            // console.log(results[0].minBMI)
+            // console.log(results[0].avgBMI)
+            if (results[0] != null) {
+                res.send({
+                    maxBMI: results[0].maxBMI,
+                    minBMI: results[0].minBMI,
+                    avgBMI: results[0].avgBMI
+                });
+            } else {
+                res.send({
+                    maxBMI: 0,
+                    minBMI: 0,
+                    avgBMI: 0
+                });
+            }
+            
+        }
+    });
+});
+
+app.post('/clearhistory', (req,res) => {
+    var userID = global_userID;
+    
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+        var order_query = "DELETE FROM order_record WHERE userID = ?"
+        var order_sql = mysql.format(order_query, [userID])
+        console.log(order_sql)
+
+        var health_query = "DELETE FROM health_record WHERE healthUserID = ?"
+        var health_sql = mysql.format(health_query, [userID])
+        console.log(health_sql)
+        
+        connection.query (order_sql, (err,result) => {
+            if (err) throw (err)
+            console.log("--> Deleted order record(s): ", result.affectedRows)
+            connection.query (health_sql, (err,result) => {
+                connection.release()
+                if (err) throw (err)
+                console.log("--> Deleted health record(s): ", result.affectedRows)
+                res.send(201)
+            })
+        })
+    })
+})
 
 //To-do:
 //1. Add Code for filter button:

@@ -14,6 +14,9 @@ function Landing({ onLoginSuccessful }) {
   const [sumCalories,setSumCalories] = useState(0);  
   const [bmi, setBmi] = useState(0);
   const [bmr, setBmr] = useState(0);
+  const [avgBmi, setAvgBmi] = useState(0);
+  const [maxBmi, setMaxBmi] = useState(0);
+  const [minBmi, setMinBmi] = useState(0);
   const [below_100, setBelow_100] = useState(false);
   const [on_100_200,setOn_100_200] = useState(false);
   const [on_200_300, setOn_200_300] = useState(false);
@@ -30,6 +33,7 @@ function Landing({ onLoginSuccessful }) {
   const onGenderChange = (event) => setGender(event.target.value);
   const onAgeChange = (event) => setAge(event.target.value);
 
+  /* STAGE 1 */
 
   var BMI = 0;
   var minBMI = 0;
@@ -53,7 +57,6 @@ function Landing({ onLoginSuccessful }) {
   }
   
   var onStatSubmit = (e) => {
-    calculateStats();
     e.preventDefault();
 
     var today = new Date();
@@ -76,6 +79,8 @@ function Landing({ onLoginSuccessful }) {
         console.log(res.status);
     })
   }
+
+  /* STAGE 2 */
 
   const onFilterSubmit = () => {};
 
@@ -143,10 +148,6 @@ function Landing({ onLoginSuccessful }) {
     console.log(row["foodID"] + ", " + totalCalories);
   }
 
-  function clearHistory() {}
-
-  function generateHistory() {}
-
   function generateSummary() {
     var summary = "";
     if (bmr - sumCalories < 0) {
@@ -156,6 +157,39 @@ function Landing({ onLoginSuccessful }) {
     }
     return summary;
   }
+
+  var onOrderSubmit = (e) => {
+    let body = {
+      "totalOrderCalories": sumCalories,
+    }
+    axios.post("http://localhost:8000/submitorder", body).then((res) => {
+        console.log(res.status);
+    })
+  }
+
+  /* STAGE 3 */
+
+  var onViewHistory = () => {
+    axios.get("http://localhost:8000/gethistory").then((res) => {
+        // console.log(res.data)
+        // console.log(res.data.minBMI)
+        // console.log(res.data.maxBMI)
+        // console.log(res.data.avgBMI)
+        setMinBmi(res.data.minBMI)
+        setMaxBmi(res.data.maxBMI)
+        setAvgBmi(res.data.avgBMI)
+        // console.log(minBmi)
+        // console.log(maxBmi)
+        // console.log(avgBmi)
+    })
+  }
+
+  var onClearHistory = () => {
+    axios.post("http://localhost:8000/clearhistory", {}).then((res) => {
+        console.log(res.status);
+    })
+  }
+
 
   // function clickHandler(text,isClicked)
   // {
@@ -231,7 +265,7 @@ function Landing({ onLoginSuccessful }) {
             </Form.Select>
             </Form.Group>
             <br></br>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={calculateStats}>
               Submit Stats
             </Button>
           </Form>
@@ -317,7 +351,8 @@ function Landing({ onLoginSuccessful }) {
             </BootstrapTable>
             <br></br>
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {setSumCalories(sumCalories+totalCalories); console.log(bmi);console.log(bmr);  generateSummary()}}>
+            <Button variant="primary" onClick={() => {console.log(bmi);console.log(bmr); setSumCalories(sumCalories+totalCalories);
+              generateSummary(); onOrderSubmit()}}>
               Submit Order
             </Button>
           </Form>
@@ -327,7 +362,7 @@ function Landing({ onLoginSuccessful }) {
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
             <h4>You are on {bmr - sumCalories} kcal {generateSummary()}</h4>
-            <Button variant="primary" onClick={() => {generateHistory(); handleShow()}}>
+            <Button variant="primary" onClick={() => {onViewHistory(); handleShow()}}>
               View History
             </Button>
 
@@ -336,18 +371,18 @@ function Landing({ onLoginSuccessful }) {
                 <Modal.Title>History</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Highest BMI: {maxBMI}
+                Highest BMI: {maxBmi}
                 <br></br> 
-                Lowest BMI: {minBMI}
+                Lowest BMI: {minBmi}
                 <br></br> 
-                Average BMI: {avgBMI}
+                Average BMI: {avgBmi}
                 <br></br> 
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
-                <Button variant="primary" onClick={clearHistory}>
+                <Button variant="primary" onClick={onClearHistory}>
                   Clear History
                 </Button>
               </Modal.Footer>
