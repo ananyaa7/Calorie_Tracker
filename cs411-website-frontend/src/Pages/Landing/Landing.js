@@ -4,6 +4,7 @@ import { Container, Form, Button, Alert, Card, Dropdown, Row, Modal } from "reac
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import TextField from "@mui/material/TextField";
 import axios from 'axios';
+import "./Landing.css";
 
 
 function Landing({ onLoginSuccessful }) {
@@ -82,71 +83,73 @@ function Landing({ onLoginSuccessful }) {
 
   /* STAGE 2 */
 
-  const onFilterSubmit = () => {};
+  function getSelected() {
+    var grid = document.getElementById("foodTable");
+    var checkboxes = grid.getElementsByTagName("INPUT");
+    totalCalories = 0;
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          var row = checkboxes[i].parentNode.parentNode;
+          // console.log(row)
+          // console.log(row.cells[2].innerHTML)
+          // console.log(row.cells[3].innerHTML)
+          // console.log(row.cells[4].innerHTML)
+          totalCalories += parseInt(row.cells[2].innerHTML);
+          totalCalories += parseInt(row.cells[3].innerHTML);
+          totalCalories += parseInt(row.cells[4].innerHTML);
+          // console.log(totalCalories)
+          // console.log(sumCalories)
+        } 
+        setSumCalories(totalCalories);
+    }
+  }
 
-  const columns = [{
-    dataField: 'foodID',
-    text: 'ID'
-    }, {
-    dataField: 'foodName',
-    text: 'Food Name'
-    }, {
-    dataField: 'carbsCalories',
-    text: 'Carbohydrate Calories'
-    }, {
-    dataField: 'proteinCalories',
-    text: 'Protein Calories'
-    }, {
-    dataField: 'fiberCalories',
-    text: 'Fiber Calories'
-    }];
+  const [foods, setFoods] = useState([]);
 
-  const foods = [{
-    foodID: 1,
-    foodName: "apple",
-    carbsCalories: 100,
-    proteinCalories: 100,
-    fiberCalories: 50
-    },{
-    foodID: 2,
-    foodName: "banana",
-    carbsCalories: 20,
-    proteinCalories: 30,
-    fiberCalories: 40
-  },{
-    foodID: 3,
-    foodName: "grapes",
-    carbsCalories: 20,
-    proteinCalories: 30,
-    fiberCalories: 40
-  },{
-    foodID: 4,
-    foodName: "orange",
-    carbsCalories: 20,
-    proteinCalories: 30,
-    fiberCalories: 40
-  }];
-  
-  var selectRowProp = { 
-    mode: "checkbox",
-    clickToSelect: true,
-    onSelect: onRowSelect
-  };
+  var onFilterSubmit = () => {
+    if (!carbs && !protein && ! fiber) {
+      setFoods([])
+    }
 
-  function onRowSelect(row, isSelected){
-    for(var prop in row){
-      console.log(prop)
-        if (prop != "foodID" && prop != "foodName" && isSelected) {
-          totalCalories += parseInt(row[prop]);
-        }
-        else if(prop != "foodID" && prop != "foodName" && !isSelected)
-        {
-          totalCalories -= parseInt(row[prop]);
-        }
+    if (carbs && !protein && !fiber) {
+      axios.get("http://localhost:8000/highcarbohydrate").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
     }
     
-    console.log(row["foodID"] + ", " + totalCalories);
-  }
+    if (protein && !carbs && !fiber) {
+      axios.get("http://localhost:8000/highprotein").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
+
+    if (fiber && !protein && !carbs) {
+      axios.get("http://localhost:8000/highfiber").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
+    
+    /* NOT IMPLEMENTED YET */
+    // if (fiber && protein && !carbs) {
+
+    // }
+
+    // if (carbs && protein && !fiber) {
+
+    // }
+
+    // if (carbs && fiber && !protein) {
+
+    // }
+
+    // if (carbs && fiber && protein) {
+
+    // }
+
+  };
 
   function generateSummary() {
     var summary = "";
@@ -305,7 +308,7 @@ function Landing({ onLoginSuccessful }) {
                 />
               </Form>
 
-            <Dropdown.Divider />
+            {/* <Dropdown.Divider />
             <Form>
                 <Form.Check 
                     type='checkbox'
@@ -334,25 +337,49 @@ function Landing({ onLoginSuccessful }) {
                     label='Above 300 kcal'
                     onChange = {() => {setOn_300_above(!on_300_above)}}
                 />
-              </Form>
+              </Form> */}
 
-              <Button variant="success" size="sm"  onClick = {()=>informationState()}>
+              <Button variant="success" size="sm"  onClick = {()=>{informationState(); onFilterSubmit()}}>
                  Apply
               </Button>
             </Dropdown.Menu>
           </Dropdown>
-        
-            <BootstrapTable selectRow={ selectRowProp } search={ {searchFormatted: true} } data={foods} striped={true} hover={true}>
+    
+            {/* <BootstrapTable selectRow={ selectRowProp } search={ {searchFormatted: true} } data={foods} striped={true} hover={true}>
               <TableHeaderColumn dataField="foodID" isKey={true} dataAlign="center" dataSort={true}>ID</TableHeaderColumn>
               <TableHeaderColumn dataField="foodName" dataAlign="center">Food Name</TableHeaderColumn>
               <TableHeaderColumn dataField="carbsCalories" dataAlign="center">Carbs Calories</TableHeaderColumn>
               <TableHeaderColumn dataField="proteinCalories" dataAlign="center">Protein Calories</TableHeaderColumn>
               <TableHeaderColumn dataField="fiberCalories" dataAlign="center">Fiber Calories</TableHeaderColumn>
-            </BootstrapTable>
+            </BootstrapTable> */}
+
+            <table className="table is-striped is-fullwidth" id="foodTable">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>Food Name</th>
+                        <th>Carbs Calories</th>
+                        <th>Protein Calories</th>
+                        <th>Fiber Calories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { foods.map((food, index) => (
+                        <tr key={ food.foodID }>
+                            <td><input type="checkbox"/></td>
+                            <td>{ food.foodName }</td>
+                            <td>{ food.carbsCalories }</td>
+                            <td>{ food.proteinCalories }</td>
+                            <td>{ food.fiberCalories }</td>
+                        </tr>
+                    )) }
+                </tbody>
+            </table>
+
             <br></br>
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {console.log(bmi);console.log(bmr); setSumCalories(sumCalories+totalCalories);
-              generateSummary(); onOrderSubmit()}}>
+            <Button variant="primary" onClick={() => {console.log(bmi);console.log(bmr); getSelected(); 
+                generateSummary(); onOrderSubmit()}}>
               Submit Order
             </Button>
           </Form>

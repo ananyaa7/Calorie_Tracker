@@ -1,0 +1,10 @@
+thead,
+tbody {
+  display: block;
+}
+
+tbody {
+    width: 850px;
+    height:400px;
+    overflow: auto;
+}
