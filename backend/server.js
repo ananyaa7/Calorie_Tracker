@@ -186,6 +186,7 @@ app.post("/submitstats", (req, res) => {
     })
 })
 
+// TO DO: Display food based on search bar
 app.get('/getfoodtable', (req,res) => {})
 
 app.get('/submitorder', (req,res) => {
@@ -300,7 +301,7 @@ app.get('/highcarbohydrate', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) From Food f2);"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) From Food f2) LIMIT 300;"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -319,7 +320,7 @@ app.get('/highprotein', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) From Food f2);"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) From Food f2) LIMIT 300;"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -338,7 +339,7 @@ app.get('/highfiber', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.fiberCalories > (SELECT AVG(f2.fiberCalories) From Food f2);"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.fiberCalories > (SELECT AVG(f2.fiberCalories) From Food f2) LIMIT 300;"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
