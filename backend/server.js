@@ -128,6 +128,34 @@ app.post("/login", (req, res)=> {
     }) //end of db.connection()
     }) //end of app.post()
 
+//Forgot Password Api
+app.post("/forgotpassword", (req, res)=> {
+    const email = req.body.email
+    const password = req.body.password
+    conn.getConnection ( (err, connection)=> {
+     if (err) throw (err)
+     const sqlSearch = "Select * from user where email LIKE ?"
+     const search_query = mysql.format(sqlSearch,[email])
+     console.log(search_query)
+     connection.query (search_query, (err, result) => {
+      connection.release()
+      
+      if (err) throw (err)
+      if (result.length == 0) {
+       console.log("--------> User does not exist")
+       res.sendStatus(404)
+      } 
+      else {
+         const sqlupdate = "UPDATE user SET pass = ? WHERE email = ?"
+         const update_query = mysql.format(sqlupdate,[password, email])
+         console.log("Password updated successfully!")
+         console.log(result)
+         
+      }//end of User exists i.e. results.length==0
+     }) //end of connection.query()
+    }) //end of db.connection()
+    }) //end of app.post()
+
 /* LANDING PAGE */
 
 app.post("/submitstats", (req, res) => {
@@ -181,10 +209,7 @@ app.get('/search', (req,res) => {
     })
 })
 
-//Forgot Password Api
-app.post('/forgotpassword', () => {
 
-})
 
 app.post("/submitorder", (req, res) => {
     var orderHealthID = global_healthID;
