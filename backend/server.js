@@ -190,8 +190,7 @@ app.post("/submitstats", (req, res) => {
     })
 })
 
-// TO DO: Display food based on search bar
-
+//search 
 app.get('/search', (req,res) => {
     var foodName = '%' + req.query.foodName + '%';
     conn.getConnection( (err, connection) => {
@@ -210,8 +209,6 @@ app.get('/search', (req,res) => {
 		})
     })
 })
-
-
 
 app.post("/submitorder", (req, res) => {
     var orderHealthID = global_healthID;
@@ -357,14 +354,14 @@ app.get('/highfiber', (req,res) => {
     })
 })
 
-//High Calories (> 300 kCal) STILL NOT WORKING
-app.get('/highcalories', (req,res) => {
+
+app.get('/highcarbs-protein', (req,res) => {
     var foodName = req.query.foodName;
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.proteinCalories > (SELECT AVG(f4.proteinCalories) FROM Food f4));"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -376,6 +373,82 @@ app.get('/highcalories', (req,res) => {
 		})
     })
 })
+
+app.get('/highcarbs-fibers', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+app.get('/highprotein-fibers', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+app.get('/highcarbs-protein-fibers', (req,res) => {
+    var foodName = req.query.foodName;
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.proteinCalories > (SELECT AVG(f4.proteinCalories) FROM Food f4)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const search_query2 = mysql.format(sqlSearch, [foodName])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+//High Calories (> 300 kCal) STILL NOT WORKING
+// app.get('/highcalories', (req,res) => {
+//     var foodName = req.query.foodName;
+//     conn.getConnection( (err, connection) => {
+
+//         if (err) throw (err)
+
+//         const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
+//         const search_query2 = mysql.format(sqlSearch, [foodName])
+
+//         connection.query (search_query2, (err, result) => {
+//             console.log(err,result);
+//             if (err) {res.send(err);}
+//             else {
+//                 res.json(result); //Displays results to the webpage
+//             } 
+// 		})
+//     })
+// })
 
 
 
