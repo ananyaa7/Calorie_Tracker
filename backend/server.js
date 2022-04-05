@@ -136,6 +136,8 @@ app.post("/forgotpassword", (req, res)=> {
      if (err) throw (err)
      const sqlSearch = "Select * from user where email LIKE ?"
      const search_query = mysql.format(sqlSearch,[email])
+     const sqlupdate = "UPDATE user SET pass = ? WHERE email LIKE ?"
+     const update_query = mysql.format(sqlupdate,[password, email])
      console.log(search_query)
      connection.query (search_query, (err, result) => {
       connection.release()
@@ -144,13 +146,13 @@ app.post("/forgotpassword", (req, res)=> {
       if (result.length == 0) {
        console.log("--------> User does not exist")
        res.sendStatus(404)
-      } 
-      else {
-         const sqlupdate = "UPDATE user SET pass = ? WHERE email = ?"
-         const update_query = mysql.format(sqlupdate,[password, email])
-         console.log("Password updated successfully!")
-         console.log(result)
-         
+      } else {
+            connection.query (update_query, (err,result) => {
+                connection.release()
+                if (err) throw (err)
+                console.log ("--> Password Changed Successfully!")
+                res.sendStatus(201)
+            })
       }//end of User exists i.e. results.length==0
      }) //end of connection.query()
     }) //end of db.connection()
