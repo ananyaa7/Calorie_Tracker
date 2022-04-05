@@ -164,12 +164,12 @@ app.post("/submitstats", (req, res) => {
 // app.get('/getfoodtable', (req,res) => {})
 
 app.get('/search', (req,res) => {
-    var foodName = req.query.foodName;
+    var foodName = '%' + req.query.foodName + '%';
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT fiberCalories,proteinCalories,carbscalories,foodId,foodName FROM food WHERE foodName = ?"
+        const sqlSearch = "SELECT fiberCalories,proteinCalories,carbscalories,foodId,foodName FROM Food WHERE foodName LIKE ?"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -177,6 +177,7 @@ app.get('/search', (req,res) => {
             if (err) throw (err)
             console.log("--> Search Results");
             console.log(result)
+            res.json(result)
 		})
     })
 })
