@@ -373,10 +373,9 @@ app.get('/highcalories', (req,res) => {
 })
 
 
-
 var http = require('http').Server(app);
 var port = 8000;
 
 http.listen(port, function() {
-    console.log('Listening');
+    console.log('Listening')
 });
