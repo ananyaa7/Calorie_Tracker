@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Card, Dropdown, Row, Modal } from "react-bootstrap";
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 import "./Landing.css";
 
@@ -25,6 +28,7 @@ function Landing({ onLoginSuccessful }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [search,setSearch] = useState("");
 
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
@@ -187,6 +191,18 @@ function Landing({ onLoginSuccessful }) {
   var onClearHistory = () => {
     axios.post("http://localhost:8000/clearhistory", {}).then((res) => {
         console.log(res.status);
+    })
+  }
+
+  var onSearch = () => {
+   
+    console.log(search);
+    axios.get("http://localhost:8000/submitorder",{
+      params: {
+        foodName: search 
+      }
+    }).then((res) => {
+      setFoods(res.data)
     })
   }
 
@@ -359,6 +375,17 @@ function Landing({ onLoginSuccessful }) {
                         <th>Carbs Calories</th>
                         <th>Protein Calories</th>
                         <th>Fiber Calories</th>
+                        
+                        <TextField 
+                        style={{width: '20ch' }} 
+                        id="standard-basic" 
+                        label="" 
+                        variant="standard" 
+                        onChange={ (e) => {setSearch(e.target.value)}}
+                        />
+                        <IconButton sx={{ p: '10px' }} aria-label="search" onClick={()=>{onSearch()}}>
+                             <SearchIcon />
+                        </IconButton>
                     </tr>
                 </thead>
                 <tbody>
