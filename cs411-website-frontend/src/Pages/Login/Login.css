@@ -45,6 +45,23 @@
     color: #12565a;
     text-decoration: none;
   }
+
+  .ForgotPass{
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 13px;
+    line-height: 22px;
+  
+    text-align: center;
+    color: #12565a;
+    text-decoration: none;
+  
+  }
+  .ForgotPass:hover {
+    color: #11848a;
+  }
+  
   .SignRout_b {
     width: 293px;
     height: 22px;

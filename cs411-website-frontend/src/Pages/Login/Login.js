@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import {Modal} from "react-bootstrap";
 import "./Login.css";
 
 import { Link } from "react-router-dom";
@@ -32,6 +33,10 @@ const Login = () => {
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     var handleLogin = (e) => {
       e.preventDefault();
@@ -42,6 +47,12 @@ const Login = () => {
       axios.post("http://localhost:8000/login",body).then((res) => {
         console.log(res.status);
       })
+    }
+
+    var handleUpdatePass = () =>
+    {
+      console.log(newPassword)
+
     }
     return(
     <div className="LogIn">
@@ -70,6 +81,8 @@ const Login = () => {
             Log In
           </Button>
 
+          
+
           <p className="SignRout">
             {" "}
             Don't have an account?
@@ -77,7 +90,36 @@ const Login = () => {
               {" "}
               Sign-Up
             </Link>
+            <br></br>
+
+            <p className="ForgotPass"  onClick={() => handleShow()}>
+              {" "}
+              Forgot password?
+            </p>
           </p>
+
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Update your password</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <TextField 
+              style={{ textAlign:"center" }} 
+              id="outlined-basic" 
+              label="New Password" 
+              variant="outlined" 
+              onChange={(e)=>{setNewPassword(e.target.value)}}
+              />
+
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary">Close</Button>
+              <Button variant="primary" onClick ={ () => handleUpdatePass()}>Save changes</Button>
+            </Modal.Footer>
+        </Modal>
+
         </div>
       </form>
     </div>
