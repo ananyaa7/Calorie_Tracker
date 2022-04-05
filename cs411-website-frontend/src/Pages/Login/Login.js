@@ -136,7 +136,7 @@ const Login = () => {
 
             <Modal.Footer>
               <Button variant="secondary">Close</Button>
-              <Button variant="primary" onClick ={ () => handleUpdatePass()}>Save changes</Button>
+              <Button variant="primary" onClick ={ () => {handleUpdatePass(); handleClose();}}>Save changes</Button>
             </Modal.Footer>
         </Modal>
 
