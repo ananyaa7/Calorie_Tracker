@@ -106,7 +106,8 @@ app.post("/login", (req, res)=> {
       if (err) throw (err)
       if (result.length == 0) {
        console.log("--------> User does not exist")
-       res.sendStatus(404)
+       res.send("Email incorrect");
+       res.status(404);
       } 
       else {
          const hashedPassword = result[0].pass
@@ -116,11 +117,12 @@ app.post("/login", (req, res)=> {
         if (password === hashedPassword) {
             console.log("---------> Login Successful")
             global_userID = result[0].userID
-            res.send(`${email} is logged in!`)
+            // res.send(`${email} is logged in!`)
+            res.send("successful");
         }
         else {
         console.log("---------> Password Incorrect")
-        res.send("Password incorrect!")
+        res.send("Password incorrect")
         // res.status(200).render()
         } //end of bcrypt.compare()
       }//end of User exists i.e. results.length==0

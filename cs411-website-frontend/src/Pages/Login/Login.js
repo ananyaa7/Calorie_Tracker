@@ -5,6 +5,9 @@ import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import {Modal} from "react-bootstrap";
+import { useNavigation } from '@react-navigation/native';
+
+
 import "./Login.css";
 
 
@@ -40,13 +43,17 @@ function getBody(){
   return userToken?.token
 }
 
+
 const Login = () => {
     
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [errorEmail,setErrorEmail] = useState("");
+    const [errorPass,setErrorPass] = useState("");
     const [show, setShow] = useState(false);
+    const [authed, setAuthed] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -58,7 +65,23 @@ const Login = () => {
         "password": password
       }
       axios.post("http://localhost:8000/login",body).then((res) => {
-        console.log(res.status);
+        console.log(res);
+        if (res.data == "successful")
+        {
+          setErrorPass(res.data);
+          setErrorEmail(res.data);
+          
+        }
+        else if (res.data == "Password incorrect")
+        {
+          //show password incorrect
+          setErrorPass(res.data);
+        }
+        else{
+          //email incorrect
+          setErrorEmail(res.data)
+          setErrorPass("Password incorrect");
+        }
       })
     }
 
@@ -86,6 +109,8 @@ const Login = () => {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          error = {errorEmail === "Email incorrect"}
+          helperText={errorEmail === "Email incorrect" ? 'Email incorrect!' : ' '}
         />
         <TextField
           label="Password"
@@ -93,15 +118,18 @@ const Login = () => {
           type="password"
           required
           value={password}
+          id="outlined-error"
           onChange={(e) => setPassword(e.target.value)}
+          error = {errorPass === "Password Incorrect"}
+          helperText={errorPass === "Password incorrect" ? 'Password incorrect!' : ' '}
         />
 
         <div>
-          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} onClick ={handleLogin}>
+        
+          <Button className="button1" variant="contained" style={{backgroundColor:'#12565a'}} onClick ={handleLogin}>
             Log In
           </Button>
 
-          
 
           <p className="SignRout">
             {" "}

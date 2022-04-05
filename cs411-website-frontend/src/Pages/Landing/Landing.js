@@ -134,21 +134,33 @@ function Landing({ onLoginSuccessful }) {
     }
     
     /* NOT IMPLEMENTED YET */
-    // if (fiber && protein && !carbs) {
+    if (fiber && protein && !carbs) {
+      axios.get("http://localhost:8000/highprotein-fibers").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
 
-    // }
+    if (carbs && protein && !fiber) {
+      axios.get("http://localhost:8000/highcarbs-protein").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
 
-    // if (carbs && protein && !fiber) {
+    if (carbs && fiber && !protein) {
+      axios.get("http://localhost:8000/highcarbs-fibers").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
 
-    // }
-
-    // if (carbs && fiber && !protein) {
-
-    // }
-
-    // if (carbs && fiber && protein) {
-
-    // }
+    if (carbs && fiber && protein) {
+      axios.get("http://localhost:8000/highcarbs-protein-fibers").then((res) => {
+        // console.log(res.data)
+        setFoods(res.data)
+      })
+    }
 
   };
 
@@ -404,7 +416,7 @@ function Landing({ onLoginSuccessful }) {
             <br></br>
 
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {console.log(bmi);console.log(bmr); getSelected(); 
+            <Button variant="primary" onClick={() => {console.log(bmi); console.log(bmr); getSelected(); 
                 generateSummary(); onOrderSubmit()}}>
               Submit Order
             </Button>
