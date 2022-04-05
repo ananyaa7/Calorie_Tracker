@@ -125,7 +125,6 @@ const Login = () => {
         />
 
         <div>
-        
           <Button className="button1" variant="contained" style={{backgroundColor:'#12565a'}} onClick ={handleLogin}>
             Log In
           </Button>

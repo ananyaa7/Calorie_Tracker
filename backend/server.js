@@ -362,8 +362,7 @@ app.get('/highcarbs-protein', (req,res) => {
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
-
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.proteinCalories > (SELECT AVG(f4.proteinCalories) FROM Food f4));"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.proteinCalories > (SELECT AVG(f4.proteinCalories) FROM Food f4));"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -382,7 +381,7 @@ app.get('/highcarbs-fibers', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) FROM Food f2) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"        
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -401,7 +400,7 @@ app.get('/highprotein-fibers', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) FROM Food f2) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"        
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -420,7 +419,7 @@ app.get('/highcarbs-protein-fibers', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.carbsCalories > (SELECT AVG(f2.carbsCalories) FROM Food f2)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.proteinCalories > (SELECT AVG(f4.proteinCalories) FROM Food f4)) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4));"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.proteinCalories > (SELECT AVG(f2.proteinCalories) FROM Food f2) AND f1.foodName IN (SELECT f3.foodName FROM Food f3 WHERE f3.fiberCalories > (SELECT AVG(f4.fiberCalories) FROM Food f4))AND f1.foodName IN (SELECT f5.foodName FROM Food f5 WHERE f5.carbsCalories > (SELECT AVG(f6.carbsCalories) FROM Food f6));"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
