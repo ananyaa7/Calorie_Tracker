@@ -3,10 +3,11 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import { Link } from 'react-router-dom';
 import {Modal} from "react-bootstrap";
 import "./Login.css";
 
-import { Link } from "react-router-dom";
+
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,6 +29,17 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+
+function setBody(userBody){
+  sessionStorage.setItem('body', JSON.stringify(userBody));
+}
+
+function getBody(){
+  const tokenBody = sessionStorage.getItem('body');
+  const userToken = JSON.parse(tokenBody);
+  return userToken?.token
+}
+
 const Login = () => {
     
     const classes = useStyles();
@@ -37,6 +49,7 @@ const Login = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
 
     var handleLogin = (e) => {
       e.preventDefault();
@@ -52,8 +65,15 @@ const Login = () => {
     var handleUpdatePass = () =>
     {
       console.log(newPassword)
-
+      let body = {
+        "email": email,
+        "password": newPassword
+      }
+      axios.post("http://localhost:8000/forgotpassword",body).then((res) => {
+        console.log(res.status);
+      })
     }
+
     return(
     <div className="LogIn">
       <form className={classes.root}>
@@ -77,7 +97,7 @@ const Login = () => {
         />
 
         <div>
-          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} onClick = {handleLogin} >
+          <Button className="button1" type="submit" variant="contained" style={{backgroundColor:'#12565a'}} onClick ={handleLogin}>
             Log In
           </Button>
 
@@ -116,7 +136,7 @@ const Login = () => {
 
             <Modal.Footer>
               <Button variant="secondary">Close</Button>
-              <Button variant="primary" onClick ={ () => handleUpdatePass()}>Save changes</Button>
+              <Button variant="primary" onClick ={ () => {handleUpdatePass(); handleClose();}}>Save changes</Button>
             </Modal.Footer>
         </Modal>
 
