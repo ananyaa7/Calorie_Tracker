@@ -161,7 +161,6 @@ app.post("/submitstats", (req, res) => {
 })
 
 // TO DO: Display food based on search bar
-// app.get('/getfoodtable', (req,res) => {})
 
 app.get('/search', (req,res) => {
     var foodName = '%' + req.query.foodName + '%';
@@ -169,7 +168,7 @@ app.get('/search', (req,res) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT fiberCalories,proteinCalories,carbscalories,foodId,foodName FROM Food WHERE foodName LIKE ?"
+        const sqlSearch = "SELECT f1.foodName, f1.carbsCalories, f1.proteinCalories, f1.fiberCalories FROM Food f1 WHERE f1.foodName LIKE ?"
         const search_query2 = mysql.format(sqlSearch, [foodName])
 
         connection.query (search_query2, (err, result) => {
@@ -180,6 +179,11 @@ app.get('/search', (req,res) => {
             res.json(result)
 		})
     })
+})
+
+//Forgot Password Api
+app.post('/forgotpassword', () => {
+
 })
 
 app.post("/submitorder", (req, res) => {
