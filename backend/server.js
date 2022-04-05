@@ -128,32 +128,6 @@ app.post("/login", (req, res)=> {
     }) //end of db.connection()
     }) //end of app.post()
 
-
-
-
-/* Change Password */
-
-app.post("/updatePassword", (req,res) => {
-    const email = req.body.email
-    conn.getConnection((err, connection)=> {
-        if (err) throw (err)
-        const sqlSearch = "Select * FROM user WHERE email LIKE ?"
-        const search_query = mysql.format(sqlSearch,[email])
-        console.log(search_query)
-        connection.query (search_query, (err, result) => {
-         connection.release()
-         
-         if (err) throw (err)
-         if (result.length == 0) {
-          console.log("--------> User does not exist")
-          res.sendStatus(404)
-         } else {
-             const updateQry = "UPDATE user SET pass = ? WHERE email LIKE email "
-             
-         }
-    })
-})
-
 /* LANDING PAGE */
 
 app.post("/submitstats", (req, res) => {
@@ -187,9 +161,9 @@ app.post("/submitstats", (req, res) => {
 })
 
 // TO DO: Display food based on search bar
-app.get('/getfoodtable', (req,res) => {})
+// app.get('/getfoodtable', (req,res) => {})
 
-app.get('/submitorder', (req,res) => {
+app.get('/search', (req,res) => {
     var foodName = req.query.foodName;
     conn.getConnection( (err, connection) => {
 
@@ -207,7 +181,7 @@ app.get('/submitorder', (req,res) => {
     })
 })
 
-app.post('/search', (req, res) => {
+app.post("/submitorder", (req, res) => {
     var orderHealthID = global_healthID;
     var totalOrderCalories = req.body.totalOrderCalories;
     var userID = global_userID;
@@ -264,7 +238,6 @@ app.get("/gethistory", (req, res) => {
         }
     });
 });
-
 
 app.post('/clearhistory', (req,res) => {
     var userID = global_userID;
@@ -373,9 +346,10 @@ app.get('/highcalories', (req,res) => {
 })
 
 
+
 var http = require('http').Server(app);
 var port = 8000;
 
 http.listen(port, function() {
-    console.log('Listening')
+    console.log('Listening');
 });
