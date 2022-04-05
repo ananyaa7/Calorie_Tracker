@@ -163,6 +163,7 @@ function Landing({ onLoginSuccessful }) {
   }
 
   var onOrderSubmit = (e) => {
+    console.log("sum" + sumCalories)
     let body = {
       "totalOrderCalories": sumCalories,
     }
@@ -197,12 +198,13 @@ function Landing({ onLoginSuccessful }) {
   var onSearch = () => {
    
     console.log(search);
-    axios.get("http://localhost:8000/submitorder",{
+    axios.get("http://localhost:8000/search",{
       params: {
         foodName: search 
       }
     }).then((res) => {
       setFoods(res.data)
+      console.log(res.data)
     })
   }
 
@@ -226,7 +228,6 @@ function Landing({ onLoginSuccessful }) {
     if(fiber)console.log("fiber is clicked");
     console.log("im in inform"+bmi);
     console.log("im in inform"+bmr);
-
 
   }
   return (
