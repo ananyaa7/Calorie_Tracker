@@ -220,14 +220,11 @@ function Landing({ onLoginSuccessful }) {
     })
   }
 
-
-  // function clickHandler(text,isClicked)
-  // {
-  //       if(isClicked)
-  //       console.log(text+"clicked");
-  //       else
-  //       console.log(text+"unclicked");
-  // }
+  var handleLogout = () =>
+  {
+        localStorage.clear();
+        window.location.href = '/Login';
+  }
 
   function informationState()
   {
@@ -244,9 +241,7 @@ function Landing({ onLoginSuccessful }) {
   }
   return (
     <Container>
-    <Button variant="secondary" type="submit">
-        Logout
-    </Button>
+  
       <Card className="mt-5">
         <Card.Header as="h1">Calories Tracker</Card.Header>
         <Card.Header as="h2">Step 1: Enter Stats</Card.Header>

@@ -16,7 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from './logo.svg';
 
-const pages = ["Landing", "SignUp", "Login"];
+const pages = ["Logout"];
 
 
 const Navbar = () => {
@@ -32,6 +32,8 @@ const Navbar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    localStorage.clear();
+    window.location.href = '/Login';
   };
 
   const handleCloseUserMenu = () => {
@@ -54,50 +56,6 @@ const Navbar = () => {
               <Logo height={50} />
           
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link
-                      style={{ textDecoration: "none", color: "black" }}
-                      to={`/${page}`}
-                    >
-                      {page}
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-
-          </Box>
           <Typography
             variant="h6"
             noWrap
@@ -105,20 +63,18 @@ const Navbar = () => {
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+           
               <Button
-                key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
+                sx={{ my: 2, color: "white", display: "block" }}>
                 <Link
                   style={{ textDecoration: "none", color: "#12565a" }}
-                  to={`/${page}`}
+                  to={'/Login'}
                 >
-                  {page}
+                  Logout
                 </Link>
               </Button>
-            ))}
+
           </Box>         
         </Toolbar>
       </Container>

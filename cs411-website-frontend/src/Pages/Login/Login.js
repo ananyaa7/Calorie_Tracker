@@ -5,8 +5,7 @@ import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import {Modal} from "react-bootstrap";
-
-
+import { Navigate } from 'react-router-dom';
 
 import "./Login.css";
 
@@ -70,7 +69,7 @@ const Login = () => {
         {
           setErrorPass(res.data);
           setErrorEmail(res.data);
-          
+          setAuthed(true);
         }
         else if (res.data == "Password incorrect")
         {
@@ -96,6 +95,10 @@ const Login = () => {
         console.log(res.status);
       })
     }
+
+     if (authed === true) {
+     return <Navigate to="/Landing" />;
+  }
 
     return(
     <div className="LogIn">

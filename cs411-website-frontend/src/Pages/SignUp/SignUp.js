@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 import "./SignUp.css";
 
 import { Link } from "react-router-dom";
@@ -37,6 +38,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [authed, setAuthed] = useState(false);
+  
 
   var handleSignup = (e) => {
     e.preventDefault();
@@ -48,8 +51,18 @@ const SignUp = () => {
     }
     axios.post("http://localhost:8000/signup", body).then((res) => {
         console.log(res.status);
+        if (res.status == 201)
+        {
+          setAuthed(true);
+        }
     })
+    
   }
+
+  if (authed === true) {
+    return <Navigate to="/Landing" />;
+ }
+
   return (
     <div className="SignUp">
       <form className={classes.root}>
