@@ -192,6 +192,21 @@ app.post("/submitstats", (req, res) => {
     })
 })
 
+//still draft 
+// app.get("/recommend",(req,res) => {
+//     conn.getConnection((err, connection) => {
+//         if(err)
+//         {
+//             console.log("--> recommend error")
+//         }
+//        else
+//        {
+//             const res = connection.input('globalHealthID', req.query.healthUserID).execute(`FindExerciseType`);
+//             res.json(res) 
+//        }
+//     })
+// })
+
 //search 
 app.get('/search', (req,res) => {
     var foodName = '%' + req.query.foodName + '%';

@@ -19,7 +19,7 @@ function Landing({ onLoginSuccessful }) {
   const [maxBmi, setMaxBmi] = useState(0);
   const [minBmi, setMinBmi] = useState(0);
   const [below_100, setBelow_100] = useState(false);
-  const [on_100_200,setOn_100_200] = useState(false);
+  const [on_100_200, setOn_100_200] = useState(false);
   const [on_200_300, setOn_200_300] = useState(false);
   const [on_300_above, setOn_300_above] = useState(false);
   const [carbs,setCarbs] = useState(false);
@@ -29,6 +29,7 @@ function Landing({ onLoginSuccessful }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
+  const [exercise,setExercise] = useState("");
 
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
@@ -163,6 +164,8 @@ function Landing({ onLoginSuccessful }) {
     }
 
   };
+
+
 
   function generateSummary() {
     var summary = "";
@@ -450,7 +453,9 @@ function Landing({ onLoginSuccessful }) {
                 </Button>
               </Modal.Footer>
             </Modal>
-            {/* <h4>We recommend the following exercises that best fit your health record:</h4> */}
+            <h4>We recommend the following exercises that best fit your health record:</h4>
+
+
         </Card.Body>
       </Card>
     </Container>
