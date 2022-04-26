@@ -454,7 +454,28 @@ function Landing({ onLoginSuccessful }) {
               </Modal.Footer>
             </Modal>
             <h4>We recommend the following exercises that best fit your health record:</h4>
-
+            <table className="table is-striped is-fullwidth" id="exerciseTable">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>Exercise Name</th>
+                        <TextField 
+                        style={{width: '20ch' }} 
+                        id="standard-basic" 
+                        label="" 
+                        variant="standard" 
+                        />
+                    </tr>
+                </thead>
+                <tbody>
+                    { exercises.map((exercise, index) => (
+                        <tr key={ exercise.exerciseID }>
+                            <td>{ exercise.exerciseName }</td>
+                            <td>{ exercise.exerciseType }</td>
+                        </tr>
+                    )) }
+                </tbody>
+            </table>
 
         </Card.Body>
       </Card>
