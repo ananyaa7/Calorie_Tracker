@@ -95,8 +95,8 @@ function Landing({ onLoginSuccessful }) {
   }
 
   var getExercise = () => {
-    axios.get('http://localhost:8000/exercises').then((res) => {
-      console.log(res.data)
+    axios.get('http://localhost:8000/exercise').then((res) => {
+      console.log("res"+ res.data)
       setExercises(res.data)
     })
   }
