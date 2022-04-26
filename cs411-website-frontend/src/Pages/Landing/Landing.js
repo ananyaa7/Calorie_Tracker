@@ -5,7 +5,18 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 import "./Landing.css";
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 function Landing({ onLoginSuccessful }) {
   const [weight, setWeight] = useState("");
@@ -29,7 +40,7 @@ function Landing({ onLoginSuccessful }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
-  const [exercise,setExercise] = useState("");
+  const [exercises,setExercises] = useState([]);
 
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
@@ -82,6 +93,14 @@ function Landing({ onLoginSuccessful }) {
         console.log(res.status);
     })
   }
+
+  var getExercise = () => {
+    axios.get('http://localhost:8000/exercises').then((res) => {
+      console.log(res.data)
+      setExercises(res.data)
+    })
+  }
+  
 
   /* STAGE 2 */
 
@@ -427,10 +446,10 @@ function Landing({ onLoginSuccessful }) {
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
             <h4>You are on {bmr - sumCalories} kcal {generateSummary()}</h4>
-            <Button variant="primary" onClick={() => {onViewHistory(); handleShow()}}>
+            <Button variant="primary" onClick={() => {onViewHistory(); handleShow();getExercise();}}>
               View History
             </Button>
-            
+           
             {/* HISTORY POP UP */}
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
@@ -454,8 +473,24 @@ function Landing({ onLoginSuccessful }) {
               </Modal.Footer>
             </Modal>
             <h4>We recommend the following exercises that best fit your health record:</h4>
-
-
+           
+           {/* EXERCISE TABLE */}
+           <table className="table is-striped is-fullwidth" id="exerciseTable">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>Exercise Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { exercises.map((exercise, index) => (
+                        <tr key={ exercise.exerciseID }>
+                            <td>{ exercise.exerciseName }</td>
+                        </tr>
+                    )) }
+                </tbody>
+            </table>
+            
         </Card.Body>
       </Card>
     </Container>
