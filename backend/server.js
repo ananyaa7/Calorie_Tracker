@@ -446,26 +446,65 @@ app.get('/highcarbs-protein-fibers', (req,res) => {
 		})
     })
 })
-//High Calories (> 300 kCal) STILL NOT WORKING
-// app.get('/highcalories', (req,res) => {
-//     var foodName = req.query.foodName;
-//     conn.getConnection( (err, connection) => {
 
-//         if (err) throw (err)
+/* CREATIVE-COMPONENT */
+app.get('/BMIchart', (req,res) => {
+    var userID = global_healthID;
+    conn.getConnection( (err, connection) => {
 
-//         const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
-//         const search_query2 = mysql.format(sqlSearch, [foodName])
+        if (err) throw (err)
 
-//         connection.query (search_query2, (err, result) => {
-//             console.log(err,result);
-//             if (err) {res.send(err);}
-//             else {
-//                 res.json(result); //Displays results to the webpage
-//             } 
-// 		})
-//     })
-// })
+        const sqlSearch = "SELECT BMI FROM health_record WHERE healthUserID = ?;"
+        const search_query2 = mysql.format(sqlSearch, [userID])
 
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+/* STORED-PROCEDURE */
+app.get('/exercises', (req,res) => {
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT exerciseName FROM Exercise WHERE exerciseType = 'Low intensity';"
+        const search_query2 = mysql.format(sqlSearch)
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+/* Trigger */
+app.get('/rectable', (req,res) => {
+    var userID = global_userID
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT stat FROM RecTable WHERE userID = ?;"
+        const search_query2 = mysql.format(sqlSearch,[global_userID])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
 
 
 var http = require('http').Server(app);
