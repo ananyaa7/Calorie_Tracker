@@ -192,20 +192,6 @@ app.post("/submitstats", (req, res) => {
     })
 })
 
-//still draft 
-// app.get("/recommend",(req,res) => {
-//     conn.getConnection((err, connection) => {
-//         if(err)
-//         {
-//             console.log("--> recommend error")
-//         }
-//        else
-//        {
-//             const res = connection.input('globalHealthID', req.query.healthUserID).execute(`FindExerciseType`);
-//             res.json(res) 
-//        }
-//     })
-// })
 
 //search 
 app.get('/search', (req,res) => {
@@ -446,26 +432,101 @@ app.get('/highcarbs-protein-fibers', (req,res) => {
 		})
     })
 })
-//High Calories (> 300 kCal) STILL NOT WORKING
-// app.get('/highcalories', (req,res) => {
-//     var foodName = req.query.foodName;
-//     conn.getConnection( (err, connection) => {
 
-//         if (err) throw (err)
+/* CREATIVE-COMPONENT */
+app.get('/BMIchart', (req,res) => {
+    var userID = global_healthID;
+    conn.getConnection( (err, connection) => {
 
-//         const sqlSearch = "SELECT f1.foodName, SUM(f1.carbsCalories, f1.proteinCalories, f1.fiberCalories) as sum FROM Food f1 WHERE sum > 300;"
-//         const search_query2 = mysql.format(sqlSearch, [foodName])
+        if (err) throw (err)
 
-//         connection.query (search_query2, (err, result) => {
-//             console.log(err,result);
-//             if (err) {res.send(err);}
-//             else {
-//                 res.json(result); //Displays results to the webpage
-//             } 
-// 		})
-//     })
-// })
+        const sqlSearch = "SELECT BMI FROM health_record WHERE healthUserID = ?;"
+        const search_query2 = mysql.format(sqlSearch, [userID])
 
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+/* STORED-PROCEDURE */
+app.get('/exercises', (req,res) => {
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT exerciseName FROM Exercise WHERE exerciseType = 'Low intensity';"
+        const search_query2 = mysql.format(sqlSearch)
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
+
+app.get("/exercise", (req,res) => {
+    var userID = global_healthID;
+    conn.getConnection((err, connection) => {
+        if (err) throw (err)
+        connection.query(`CALL FindExerciseType("${userID}")`, function(err, result){
+            console.log("-------------result2-"+ JSON.parse(JSON.stringify(result))[0]["exerciseType"])
+            if (err){
+                res.send(err);
+            } 
+            else{
+                var jsonObj = JSON.stringify(result);
+
+                console.log("1"+JSON.stringify(result)[0]["exerciseType"]);
+                console.log("2"+JSON.stringify(result)[0].exerciseType);
+                console.log("3"+result[0]["exerciseType"]);
+                console.log("4"+JSON.stringify(result)[0]);
+                console.log("5"+JSON.parse(JSON.stringify(result)));
+                console.log("6"+JSON.stringify(result));
+
+                // 
+                // console.log("result"+ result)
+                const sqlSearch = "SELECT exerciseName FROM Exercise WHERE exerciseType = ?;"
+                const search_query2 = mysql.format(sqlSearch,[JSON.parse(JSON.stringify(result))[0]["exerciseType"]]);
+        
+                connection.query (search_query2, (err2, result2) => {
+                    console.log(err2,result2);
+                    if (err2) {res.send(err2);}
+                    else {
+                        res.json(result2); //Displays results to the webpage
+                    } 
+                });
+            }
+         });
+    })
+})
+
+/* Trigger */
+app.get('/rectable', (req,res) => {
+    var userID = global_userID
+    conn.getConnection( (err, connection) => {
+
+        if (err) throw (err)
+
+        const sqlSearch = "SELECT stat FROM RecTable WHERE userID = ?;"
+        const search_query2 = mysql.format(sqlSearch,[global_userID])
+
+        connection.query (search_query2, (err, result) => {
+            console.log(err,result);
+            if (err) {res.send(err);}
+            else {
+                res.json(result); //Displays results to the webpage
+            } 
+		})
+    })
+})
 
 
 var http = require('http').Server(app);
