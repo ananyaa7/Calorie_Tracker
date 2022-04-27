@@ -437,19 +437,20 @@ app.get('/highcarbs-protein-fibers', (req,res) => {
 
 /* CREATIVE-COMPONENT */
 app.get('/BMIchart', (req,res) => {
-    var userID = global_healthID;
+    var userID = global_userID;
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT BMI FROM health_record WHERE healthUserID = ?;"
+        const sqlSearch = "SELECT BMI as BMIdata, curr_date as date FROM health_record WHERE healthUserID = ?"
         const search_query2 = mysql.format(sqlSearch, [userID])
-
+        console.log("userID " + userID)
         connection.query (search_query2, (err, result) => {
             console.log(err,result);
             if (err) {res.send(err);}
             else {
                 res.json(result); //Displays results to the webpage
+                console.log("result:" + JSON.stringify(result))
             } 
 		})
     })
