@@ -9,6 +9,9 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import {Line} from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Chart }            from 'react-chartjs-2'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -41,12 +44,41 @@ function Landing({ onLoginSuccessful }) {
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
   const [exercises,setExercises] = useState([]);
-
+  const [labels, setLabels] = useState([]);
+  const [bmi_data, setBmi_data] = useState([]);
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
   const onGenderChange = (event) => setGender(event.target.value);
   const onAgeChange = (event) => setAge(event.target.value);
 
+
+  
+  const data = {
+    labels: {labels},
+    datasets: [
+      {
+        label: 'Dataset of Months',
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        // borderColor: 'rgba(75,192,192,1)',
+        // borderCapStyle: 'butt',
+        // borderDash: [],
+        // borderDashOffset: 0.0,
+        // borderJoinStyle: 'miter',
+        // pointBorderColor: 'rgba(75,192,192,1)',
+        // pointBackgroundColor: '#fff',
+        // pointBorderWidth: 1,
+        // pointHoverRadius: 5,
+        // pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        // pointHoverBorderColor: 'rgba(220,220,220,1)',
+        // pointHoverBorderWidth: 2,
+        // pointRadius: 1,
+        // pointHitRadius: 10,
+        data: {bmi_data}
+      }
+    ]
+  }
   /* STAGE 1 */
 
   var BMI = 0;
@@ -70,6 +102,7 @@ function Landing({ onLoginSuccessful }) {
 
   }
   
+
   var onStatSubmit = (e) => {
     e.preventDefault();
 
@@ -101,6 +134,14 @@ function Landing({ onLoginSuccessful }) {
     })
   }
   
+  var setBMIData = ()=>
+  {
+    axios.get('http://localhost:8000/BMIchart').then((res) => {
+      console.log("res"+ res.data)
+      setLabels(res.data.date)
+      setBmi_data(res.data.BMIdata)
+    })
+  }
 
   /* STAGE 2 */
 
@@ -434,7 +475,7 @@ function Landing({ onLoginSuccessful }) {
 
             <h4>Total Order Calories: {sumCalories} </h4>
             <Button variant="primary" onClick={() => {console.log(bmi); console.log(bmr); getSelected(); 
-                generateSummary(); onOrderSubmit()}}>
+                generateSummary(); onOrderSubmit();getExercise()}}>
               Submit Order
             </Button>
           </Form>
@@ -446,7 +487,7 @@ function Landing({ onLoginSuccessful }) {
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
             <h4>You are on {bmr - sumCalories} kcal {generateSummary()}</h4>
-            <Button variant="primary" onClick={() => {onViewHistory(); handleShow();getExercise();}}>
+            <Button variant="primary" onClick={() => {onViewHistory(); handleShow();}}>
               View History
             </Button>
            
@@ -475,6 +516,9 @@ function Landing({ onLoginSuccessful }) {
             <h4>We recommend the following exercises that best fit your health record:</h4>
            
            {/* EXERCISE TABLE */}
+           <Button variant="primary" onClick={setBMIData}>
+                 Generate History
+            </Button>
            <table className="table is-striped is-fullwidth" id="exerciseTable">
                 <thead>
                     <tr>
@@ -490,7 +534,20 @@ function Landing({ onLoginSuccessful }) {
                     )) }
                 </tbody>
             </table>
-            
+        <Line
+          data={data}
+          options={{
+            title:{
+              display:true,
+              text:'BMI History',
+              fontSize:20
+            },
+            legend:{
+              display:true,
+              position:'right'
+            }
+          }}
+        />
         </Card.Body>
       </Card>
     </Container>

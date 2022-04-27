@@ -477,19 +477,17 @@ app.get("/exercise", (req,res) => {
     conn.getConnection((err, connection) => {
         if (err) throw (err)
         connection.query(`CALL FindExerciseType("${userID}")`, function(err, result){
-            console.log("-------------result2-"+ JSON.parse(JSON.stringify(result))[0]["exerciseType"])
+            console.log("-------------result2-")
             if (err){
                 res.send(err);
             } 
             else{
-                var jsonObj = JSON.stringify(result);
+                var jsonObj = res.json(result);
 
-                console.log("1"+JSON.stringify(result)[0]["exerciseType"]);
-                console.log("2"+JSON.stringify(result)[0].exerciseType);
-                console.log("3"+result[0]["exerciseType"]);
-                console.log("4"+JSON.stringify(result)[0]);
-                console.log("5"+JSON.parse(JSON.stringify(result)));
-                console.log("6"+JSON.stringify(result));
+
+                
+                // console.log("1"+JSON.stringify(jsonObj));
+                console.log("2"+jsonObj);
 
                 // 
                 // console.log("result"+ result)
