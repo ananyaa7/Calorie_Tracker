@@ -44,12 +44,9 @@ function Landing({ onLoginSuccessful }) {
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
   const [exercises,setExercises] = useState([]);
-<<<<<<< HEAD
-=======
   const [labels, setLabels] = useState([]);
   const [bmi_data, setBmi_data] = useState([]);
   const [stat, setStat] = useState(""); 
->>>>>>> 1f4ca1bb2a85435fe07fdbf241cc42fe49ee0df9
   const [summary, setSummary] = useState(""); 
   const [diff, setDiff] = useState(0);
   const [foods, setFoods] = useState([]);
@@ -65,7 +62,7 @@ function Landing({ onLoginSuccessful }) {
     labels: labels,
     datasets: [
       {
-        label: 'Dataset of Months',
+        label: 'BMI History',
         fill: false,
         lineTension: 0.1,
         backgroundColor: 'rgba(75,192,192,0.4)',
