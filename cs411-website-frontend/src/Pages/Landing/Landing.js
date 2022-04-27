@@ -46,6 +46,11 @@ function Landing({ onLoginSuccessful }) {
   const [exercises,setExercises] = useState([]);
   const [labels, setLabels] = useState([]);
   const [bmi_data, setBmi_data] = useState([]);
+  const [stat, setStat] = useState(""); 
+  const [summary, setSummary] = useState(""); 
+  const [diff, setDiff] = useState(0);
+  const [foods, setFoods] = useState([]);
+
   const onWeightChange = (event) => setWeight(event.target.value);
   const onHeightChange = (event) => setHeight(event.target.value);
   const onGenderChange = (event) => setGender(event.target.value);
@@ -166,8 +171,6 @@ function Landing({ onLoginSuccessful }) {
     }
   }
 
-  const [foods, setFoods] = useState([]);
-
   var onFilterSubmit = () => {
     if (!carbs && !protein && ! fiber) {
       setFoods([])
@@ -194,7 +197,6 @@ function Landing({ onLoginSuccessful }) {
       })
     }
     
-    /* NOT IMPLEMENTED YET */
     if (fiber && protein && !carbs) {
       axios.get("http://localhost:8000/highprotein-fibers").then((res) => {
         // console.log(res.data)
@@ -228,19 +230,25 @@ function Landing({ onLoginSuccessful }) {
 
 
   function generateSummary() {
-    var summary = "";
-    if (bmr - sumCalories < 0) {
-      summary += "surplus";
+    setSummary("");
+    // if (bmr - totalCalories < 0)
+    console.log("generating summary, stat = " + stat);
+    if (stat < 0) {
+      setDiff(stat * -1);
+      setSummary("surplus");
+      // summary += "surplus";
     } else {
-      summary += "deficit";
+      setDiff(stat);
+      setSummary("deficit");
+      // summary += "deficit";
     }
-    return summary;
+    // return summary;
   }
 
   var onOrderSubmit = (e) => {
-    console.log("sum" + sumCalories)
+    console.log("sumCalories: " + sumCalories)
     let body = {
-      "totalOrderCalories": sumCalories,
+      "totalOrderCalories": sumCalories
     }
     axios.post("http://localhost:8000/submitorder", body).then((res) => {
         console.log(res.status);
@@ -261,6 +269,14 @@ function Landing({ onLoginSuccessful }) {
         // console.log(minBmi)
         // console.log(maxBmi)
         // console.log(avgBmi)
+    })
+  }
+
+  var onGetStatus = () => {
+    axios.get("http://localhost:8000/getstat").then((res) => {
+        console.log("enter getstat")
+        console.log(res.data[0].stat)
+        setStat(res.data[0].stat)
     })
   }
 
@@ -398,37 +414,6 @@ function Landing({ onLoginSuccessful }) {
                 />
               </Form>
 
-            {/* <Dropdown.Divider />
-            <Form>
-                <Form.Check 
-                    type='checkbox'
-                    label='Below 100 kcal'
-                    onChange = {() => {setBelow_100(!below_100)}}
-                    
-                />
-              </Form>
-              <Form>
-                <Form.Check 
-                    type='checkbox'
-                    label='100 - 200 kcal'
-                    onChange = {() => {setOn_100_200(!on_100_200)}}
-                />
-              </Form>
-              <Form>
-                <Form.Check 
-                    type='checkbox'
-                    label='200 - 300 kcal'
-                    onChange = {() => {setOn_200_300(!on_200_300)}}
-                />
-              </Form>
-              <Form>
-                <Form.Check 
-                    type='checkbox'
-                    label='Above 300 kcal'
-                    onChange = {() => {setOn_300_above(!on_300_above)}}
-                />
-              </Form> */}
-
               <Button variant="success" size="sm"  onClick = {()=>{informationState(); onFilterSubmit()}}>
                  Apply
               </Button>
@@ -474,8 +459,8 @@ function Landing({ onLoginSuccessful }) {
             <br></br>
 
             <h4>Total Order Calories: {sumCalories} </h4>
-            <Button variant="primary" onClick={() => {console.log(bmi); console.log(bmr); getSelected(); 
-                generateSummary(); onOrderSubmit();getExercise()}}>
+            <Button variant="primary" onClick={() => {console.log("BMI: " + bmi); console.log("BMR: " + bmr); getSelected(); 
+              console.log("sumCalories: " + sumCalories); onOrderSubmit(); onGetStatus(); generateSummary(); getExercise();}}>
               Submit Order
             </Button>
           </Form>
@@ -486,10 +471,11 @@ function Landing({ onLoginSuccessful }) {
       <Card className="mt-5">
         <Card.Header as="h2">Step 3: Summary</Card.Header>
         <Card.Body>
-            <h4>You are on {bmr - sumCalories} kcal {generateSummary()}</h4>
+            <h4>You are on {diff} kcal {summary}</h4>
             <Button variant="primary" onClick={() => {onViewHistory(); handleShow();}}>
               View History
             </Button>
+            <br></br>
            
             {/* HISTORY POP UP */}
             <Modal show={show} onHide={handleClose}>
