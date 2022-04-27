@@ -143,11 +143,15 @@ function Landing({ onLoginSuccessful }) {
   {
     axios.get('http://localhost:8000/BMIchart').then((res) => {
       console.log("res"+ res.data)
-      setLabels(res.data.date)
+      for (var i = 0; i < res.data.size; i++) {
+        var date = res.data[i].date
+        console.log(date)
+      } 
+      setLabels(date)
       setBmi_data(res.data.BMIdata)
     })
-    console.log(labels)
-    console.log(bmi_data)
+    // console.log(labels)
+    // console.log(bmi_data)
   }
 
   /* STAGE 2 */
