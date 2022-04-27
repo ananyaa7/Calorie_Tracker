@@ -117,6 +117,7 @@ app.post("/login", (req, res)=> {
         if (password === hashedPassword) {
             console.log("---------> Login Successful")
             global_userID = result[0].userID
+            console.log("globalUserID: " + global_userID)
             // res.send(`${email} is logged in!`)
             res.send("successful");
         }
@@ -215,6 +216,7 @@ app.get('/search', (req,res) => {
 
 app.post("/submitorder", (req, res) => {
     var orderHealthID = global_healthID;
+    console.log("totalOrderCalories: " + req.body.totalOrderCalories);
     var totalOrderCalories = req.body.totalOrderCalories;
     var userID = global_userID;
 
@@ -454,52 +456,30 @@ app.get('/BMIchart', (req,res) => {
 })
 
 /* STORED-PROCEDURE */
-app.get('/exercises', (req,res) => {
-    conn.getConnection( (err, connection) => {
-
-        if (err) throw (err)
-
-        const sqlSearch = "SELECT exerciseName FROM Exercise WHERE exerciseType = 'Low intensity';"
-        const search_query2 = mysql.format(sqlSearch)
-
-        connection.query (search_query2, (err, result) => {
-            console.log(err,result);
-            if (err) {res.send(err);}
-            else {
-                res.json(result); //Displays results to the webpage
-            } 
-		})
-    })
-})
-
 app.get("/exercise", (req,res) => {
-    var userID = global_healthID;
+    var userID = global_userID;
     conn.getConnection((err, connection) => {
         if (err) throw (err)
-        connection.query(`CALL FindExerciseType("${userID}")`, function(err, result){
-            console.log("-------------result2-"+ JSON.parse(JSON.stringify(result))[0]["exerciseType"])
+        connection.query(`CALL FindExerciseType(?)`, [userID], function(err, result) {
+            console.log("userID: "+ userID)
             if (err){
                 res.send(err);
             } 
             else{
-                var jsonObj = JSON.stringify(result);
+                console.log("exerciseType:" + result[0][0].exerciseType)                
+    
+                // Get exercises based on exerciseType
+                const sqlSearch = "SELECT exerciseID, exerciseName FROM Exercise WHERE exerciseType = ?;"
+                const search_query2 = mysql.format(sqlSearch,[result[0][0].exerciseType]);
+                console.log(search_query2)
 
-                console.log("1"+JSON.stringify(result)[0]["exerciseType"]);
-                console.log("2"+JSON.stringify(result)[0].exerciseType);
-                console.log("3"+result[0]["exerciseType"]);
-                console.log("4"+JSON.stringify(result)[0]);
-                console.log("5"+JSON.parse(JSON.stringify(result)));
-                console.log("6"+JSON.stringify(result));
-
-                // 
-                // console.log("result"+ result)
-                const sqlSearch = "SELECT exerciseName FROM Exercise WHERE exerciseType = ?;"
-                const search_query2 = mysql.format(sqlSearch,[JSON.parse(JSON.stringify(result))[0]["exerciseType"]]);
-        
                 connection.query (search_query2, (err2, result2) => {
-                    console.log(err2,result2);
-                    if (err2) {res.send(err2);}
+                    if (err2) {
+                        console.log("STORE PROCEDURE FAILED")
+                        res.send(err2);
+                    }
                     else {
+                        console.log("STORE PROCEDURE SUCCESS")
                         res.json(result2); //Displays results to the webpage
                     } 
                 });
@@ -509,19 +489,23 @@ app.get("/exercise", (req,res) => {
 })
 
 /* Trigger */
-app.get('/rectable', (req,res) => {
+app.get('/getstat', (req,res) => {
     var userID = global_userID
     conn.getConnection( (err, connection) => {
 
         if (err) throw (err)
 
-        const sqlSearch = "SELECT stat FROM RecTable WHERE userID = ?;"
-        const search_query2 = mysql.format(sqlSearch,[global_userID])
+        const sqlSearch = "SELECT stat FROM TriggerResult WHERE userID = ? ORDER BY id DESC LIMIT 1"
+        const search_query2 = mysql.format(sqlSearch,[userID])
+        console.log(search_query2)
 
         connection.query (search_query2, (err, result) => {
-            console.log(err,result);
-            if (err) {res.send(err);}
+            if (err) {
+                console.log("err: ", err);
+                res.send(err);
+            }
             else {
+                console.log(result);
                 res.json(result); //Displays results to the webpage
             } 
 		})
