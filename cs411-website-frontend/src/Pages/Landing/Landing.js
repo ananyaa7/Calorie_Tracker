@@ -41,7 +41,6 @@ function Landing({ onLoginSuccessful }) {
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
   const [exercises,setExercises] = useState([]);
-  const [stat, setStat] = useState(""); 
   const [summary, setSummary] = useState(""); 
   const [diff, setDiff] = useState(0);
   const [foods, setFoods] = useState([]);
@@ -99,10 +98,12 @@ function Landing({ onLoginSuccessful }) {
   }
 
   var getExercise = () => {
+    console.log("getting exercise from stored procedure ...")
     axios.get('http://localhost:8000/exercise').then((res) => {
-      console.log("res"+ res.data)
+      console.log(res.data)
       setExercises(res.data)
     })
+    getStatus();
   }
   
 
@@ -187,30 +188,40 @@ function Landing({ onLoginSuccessful }) {
 
 
 
-  function generateSummary() {
+  function generateSummary(s) {
+    console.log("generatingSummary ... ");
+    console.log("stat : " + s);
+
+    const x = Math.round((bmr - totalCalories) * 100) / 100;
+    if (x < 0) {
+      setDiff(x * -1);
+    } else {
+      setDiff(x);
+    }
+
     setSummary("");
-    // if (bmr - totalCalories < 0)
-    console.log("generating summary, stat = " + stat);
-    if (stat < 0) {
-      setDiff(stat * -1);
+    if (s < 0) {
       setSummary("surplus");
       // summary += "surplus";
-    } else {
-      setDiff(stat);
+    } else if (s >= 0) {
       setSummary("deficit");
       // summary += "deficit";
     }
+    console.log("diff: " + diff);
+    console.log("summary: " + summary);
     // return summary;
   }
 
-  var onOrderSubmit = (e) => {
+  var onOrderSubmit = () => {
+    console.log("submitting order ...")
     console.log("sumCalories: " + sumCalories)
     let body = {
       "totalOrderCalories": sumCalories
     }
     axios.post("http://localhost:8000/submitorder", body).then((res) => {
-        console.log(res.status);
+        console.log("submitting order : " + res.status);
     })
+    getExercise();
   }
 
   /* STAGE 3 */
@@ -230,11 +241,14 @@ function Landing({ onLoginSuccessful }) {
     })
   }
 
-  var onGetStatus = () => {
+  var getStatus = () => {
+    console.log("getting status from trigger ...")
     axios.get("http://localhost:8000/getstat").then((res) => {
-        console.log("enter getstat")
         console.log(res.data[0].stat)
-        setStat(res.data[0].stat)
+        let s = res.data[0].stat
+        console.log(s)
+        generateSummary(s)
+        console.log(s)
     })
   }
 
@@ -418,7 +432,7 @@ function Landing({ onLoginSuccessful }) {
 
             <h4>Total Order Calories: {sumCalories} </h4>
             <Button variant="primary" onClick={() => {console.log("BMI: " + bmi); console.log("BMR: " + bmr); getSelected(); 
-              console.log("sumCalories: " + sumCalories); onOrderSubmit(); onGetStatus(); generateSummary(); getExercise();}}>
+              onOrderSubmit();}}>
               Submit Order
             </Button>
           </Form>
