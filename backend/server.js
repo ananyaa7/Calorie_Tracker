@@ -444,13 +444,13 @@ app.get('/BMIchart', (req,res) => {
 
         const sqlSearch = "SELECT BMI as BMIdata, curr_date as date FROM health_record WHERE healthUserID = ?"
         const search_query2 = mysql.format(sqlSearch, [userID])
-        console.log("userID " + userID)
+        // console.log("userID " + userID)
         connection.query (search_query2, (err, result) => {
             console.log(err,result);
             if (err) {res.send(err);}
             else {
                 res.json(result); //Displays results to the webpage
-                console.log("result:" + JSON.stringify(result))
+                 console.log("result:" + JSON.stringify(result))
             } 
 		})
     })
@@ -462,7 +462,7 @@ app.get("/exercise", (req,res) => {
     conn.getConnection((err, connection) => {
         if (err) throw (err)
         connection.query(`CALL FindExerciseType(?)`, [userID], function(err, result) {
-            console.log("userID: "+ userID)
+            // console.log("userID: "+ userID)
             if (err){
                 res.send(err);
             } 

@@ -9,9 +9,6 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import {Line} from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto'
-import { Chart }            from 'react-chartjs-2'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -107,7 +104,6 @@ function Landing({ onLoginSuccessful }) {
 
   }
   
-
   var onStatSubmit = (e) => {
     e.preventDefault();
 
@@ -145,7 +141,11 @@ function Landing({ onLoginSuccessful }) {
   {
     axios.get('http://localhost:8000/BMIchart').then((res) => {
       console.log("res"+ res.data)
-      setLabels(res.data.date)
+      for (var i = 0; i < res.data.size; i++) {
+        var date = res.data[i].date
+        console.log(date)
+      } 
+      setLabels(date)
       setBmi_data(res.data.BMIdata)
     })
     console.log(labels)
@@ -519,10 +519,7 @@ function Landing({ onLoginSuccessful }) {
             <h4>We recommend the following exercises that best fit your health record:</h4>
            
            {/* EXERCISE TABLE */}
-           <Button variant="primary" onClick={setBMIData}>
-                 Generate History
-            </Button>
-           <table className="table is-striped is-fullwidth" id="exerciseTable">
+           <table className="table is-striped" id="exerciseTable">
                 <thead>
                     <tr>
                         <td></td>
@@ -537,20 +534,7 @@ function Landing({ onLoginSuccessful }) {
                     )) }
                 </tbody>
             </table>
-        <Line
-          data={data}
-          options={{
-            title:{
-              display:true,
-              text:'BMI History',
-              fontSize:20
-            },
-            legend:{
-              display:true,
-              position:'right'
-            }
-          }}
-        />
+            
         </Card.Body>
       </Card>
     </Container>
