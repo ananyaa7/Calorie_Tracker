@@ -9,6 +9,9 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import {Line} from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Chart }            from 'react-chartjs-2'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -41,6 +44,12 @@ function Landing({ onLoginSuccessful }) {
   const handleShow = () => setShow(true);
   const [search,setSearch] = useState("");
   const [exercises,setExercises] = useState([]);
+<<<<<<< HEAD
+=======
+  const [labels, setLabels] = useState([]);
+  const [bmi_data, setBmi_data] = useState([]);
+  const [stat, setStat] = useState(""); 
+>>>>>>> 1f4ca1bb2a85435fe07fdbf241cc42fe49ee0df9
   const [summary, setSummary] = useState(""); 
   const [diff, setDiff] = useState(0);
   const [foods, setFoods] = useState([]);
@@ -50,6 +59,34 @@ function Landing({ onLoginSuccessful }) {
   const onGenderChange = (event) => setGender(event.target.value);
   const onAgeChange = (event) => setAge(event.target.value);
 
+
+  
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Dataset of Months',
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        borderColor: 'rgba(75,192,192,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: '#fff',
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        pointHoverBorderColor: 'rgba(220,220,220,1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: bmi_data
+      }
+    ]
+  }
   /* STAGE 1 */
 
   var BMI = 0;
@@ -73,6 +110,7 @@ function Landing({ onLoginSuccessful }) {
 
   }
   
+
   var onStatSubmit = (e) => {
     e.preventDefault();
 
@@ -106,6 +144,16 @@ function Landing({ onLoginSuccessful }) {
     getStatus();
   }
   
+  var setBMIData = ()=>
+  {
+    axios.get('http://localhost:8000/BMIchart').then((res) => {
+      console.log("res"+ res.data)
+      setLabels(res.data.date)
+      setBmi_data(res.data.BMIdata)
+    })
+    console.log(labels)
+    console.log(bmi_data)
+  }
 
   /* STAGE 2 */
 
@@ -474,7 +522,10 @@ function Landing({ onLoginSuccessful }) {
             <h4>We recommend the following exercises that best fit your health record:</h4>
            
            {/* EXERCISE TABLE */}
-           <table className="table is-striped" id="exerciseTable">
+           <Button variant="primary" onClick={setBMIData}>
+                 Generate History
+            </Button>
+           <table className="table is-striped is-fullwidth" id="exerciseTable">
                 <thead>
                     <tr>
                         <td></td>
@@ -489,7 +540,20 @@ function Landing({ onLoginSuccessful }) {
                     )) }
                 </tbody>
             </table>
-            
+        <Line
+          data={data}
+          options={{
+            title:{
+              display:true,
+              text:'BMI History',
+              fontSize:20
+            },
+            legend:{
+              display:true,
+              position:'right'
+            }
+          }}
+        />
         </Card.Body>
       </Card>
     </Container>
