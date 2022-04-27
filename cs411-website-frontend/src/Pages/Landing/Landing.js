@@ -134,7 +134,6 @@ function Landing({ onLoginSuccessful }) {
       console.log(res.data)
       setExercises(res.data)
     })
-    getStatus();
   }
   
   var setBMIData = ()=>
@@ -266,7 +265,6 @@ function Landing({ onLoginSuccessful }) {
     axios.post("http://localhost:8000/submitorder", body).then((res) => {
         console.log("submitting order : " + res.status);
     })
-    getExercise();
   }
 
   /* STAGE 3 */
@@ -293,7 +291,6 @@ function Landing({ onLoginSuccessful }) {
         let s = res.data[0].stat
         console.log(s)
         generateSummary(s)
-        console.log(s)
     })
   }
 
@@ -477,7 +474,7 @@ function Landing({ onLoginSuccessful }) {
 
             <h4>Total Order Calories: {sumCalories} </h4>
             <Button variant="primary" onClick={() => {console.log("BMI: " + bmi); console.log("BMR: " + bmr); getSelected(); 
-              onOrderSubmit();}}>
+              onOrderSubmit(); getExercise(); getStatus();}}>
               Submit Order
             </Button>
           </Form>
