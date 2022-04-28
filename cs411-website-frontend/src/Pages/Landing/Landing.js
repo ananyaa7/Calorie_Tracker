@@ -149,38 +149,38 @@ function Landing({ onLoginSuccessful }) {
   {
     var arr = [];
     var arr2 = [];
-    for (var i = 0; i < 4; i++) {
-      arr.push(test_data[i].date)
+    // for (var i = 0; i < 4; i++) {
+    //   arr.push(res.data[i].date)
+    //   console.log("d:" + test_data[i].date)
+    // } 
+
+    // for (var i = 0; i < 4; i++) {
+    //   arr2.push(test_data[i].BMIdata)
+    //   console.log("bmi:" + test_data[i].BMIdata)
+    // } 
+    // setLabels(arr)
+    // setBmi_data(arr2)
+    // console.log("arr1:"+arr)
+    // console.log("arr2:"+arr2)
+  // }
+    axios.get('http://localhost:8000/BMIchart').then((res) => {
+      console.log("res"+ res.data)
+      
+      for (var i = 0; i < 4; i++) {
+      arr.push(res.data[i].date)
       console.log("d:" + test_data[i].date)
     } 
 
     for (var i = 0; i < 4; i++) {
-      arr2.push(test_data[i].BMIdata)
+      arr2.push(res.data[i].BMIdata)
       console.log("bmi:" + test_data[i].BMIdata)
     } 
-    setLabels(arr)
-    setBmi_data(arr2)
-    console.log("arr1:"+arr)
-    console.log("arr2:"+arr2)
+      setLabels(arr)
+      setBmi_data(arr2)
+    })
+    console.log(labels)
+    console.log(bmi_data)
   }
-  //   axios.get('http://localhost:8000/BMIchart').then((res) => {
-  //     console.log("res"+ res.data)
-      
-  //     for (var i = 0; i < 4; i++) {
-  //       arr.push(test_data[i].date)
-  //       console.log("d:" + test_data[i].date)
-  //     } 
-
-  //     for (var i = 0; i < 4; i++) {
-  //       arr2.push(test_data[i].date)
-  //       console.log("bmi:" + test_data[i].BMIdata)
-  //     } 
-  //     setLabels(arr)
-  //     setBmi_data(arr2)
-  //   })
-  //   console.log(labels)
-  //   console.log(bmi_data)
-  // }
   
 
   /* STAGE 2 */
