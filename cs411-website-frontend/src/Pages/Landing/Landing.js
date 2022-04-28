@@ -9,6 +9,9 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import {Line} from 'react-chartjs-2';
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Chart }            from 'react-chartjs-2'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -136,21 +139,50 @@ function Landing({ onLoginSuccessful }) {
     })
     getStatus();
   }
-  
+  const test_data = [
+  {BMIdata:37, date: '04/26/2022'},
+  {BMIdata:38, date: '05/26/2022'},
+  {BMIdata:39,date: '09/26/2022'},
+  {BMIdata:40,date: '14/26/2022'}
+  ];
+
   var setBMIData = ()=>
   {
-    axios.get('http://localhost:8000/BMIchart').then((res) => {
-      console.log("res"+ res.data)
-      for (var i = 0; i < res.data.size; i++) {
-        var date = res.data[i].date
-        console.log(date)
-      } 
-      setLabels(date)
-      setBmi_data(res.data.BMIdata)
-    })
-    console.log(labels)
-    console.log(bmi_data)
+    var arr = [];
+    var arr2 = [];
+    for (var i = 0; i < 4; i++) {
+      arr.push(test_data[i].date)
+      console.log("d:" + test_data[i].date)
+    } 
+
+    for (var i = 0; i < 4; i++) {
+      arr2.push(test_data[i].BMIdata)
+      console.log("bmi:" + test_data[i].BMIdata)
+    } 
+    setLabels(arr)
+    setBmi_data(arr2)
+    console.log("arr1:"+arr)
+    console.log("arr2:"+arr2)
   }
+  //   axios.get('http://localhost:8000/BMIchart').then((res) => {
+  //     console.log("res"+ res.data)
+      
+  //     for (var i = 0; i < 4; i++) {
+  //       arr.push(test_data[i].date)
+  //       console.log("d:" + test_data[i].date)
+  //     } 
+
+  //     for (var i = 0; i < 4; i++) {
+  //       arr2.push(test_data[i].date)
+  //       console.log("bmi:" + test_data[i].BMIdata)
+  //     } 
+  //     setLabels(arr)
+  //     setBmi_data(arr2)
+  //   })
+  //   console.log(labels)
+  //   console.log(bmi_data)
+  // }
+  
 
   /* STAGE 2 */
 
@@ -519,6 +551,10 @@ function Landing({ onLoginSuccessful }) {
             <h4>We recommend the following exercises that best fit your health record:</h4>
            
            {/* EXERCISE TABLE */}
+           <Button variant="primary" onClick={setBMIData}>
+                  Generate History
+                </Button>
+           
            <table className="table is-striped" id="exerciseTable">
                 <thead>
                     <tr>
@@ -535,6 +571,21 @@ function Landing({ onLoginSuccessful }) {
                 </tbody>
             </table>
             
+            <Line
+          data={data}
+          options={{
+            title:{
+              display:true,
+              text:'BMI History',
+              fontSize:20
+            },
+            legend:{
+              display:true,
+              position:'right'
+            }
+          }}
+        />
+
         </Card.Body>
       </Card>
     </Container>

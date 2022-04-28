@@ -450,7 +450,7 @@ app.get('/BMIchart', (req,res) => {
             if (err) {res.send(err);}
             else {
                 res.json(result); //Displays results to the webpage
-                 console.log("result:" + JSON.stringify(result))
+                console.log("result:" + JSON.stringify(result))
             } 
 		})
     })
