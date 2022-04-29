@@ -12,19 +12,8 @@ BEGIN
 														ON healthID = orderHealthID
 														GROUP BY healthUserID
 														HAVING healthUserID = globalUserID);
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-    DROP TABLE IF EXISTS RecTable;
-    CREATE TABLE RecTable(
-				id INT AUTO_INCREMENT,
-        userID VARCHAR(20),
-        avgBMI REAL,
-				exerciseType VARCHAR(50),
-				BMR REAL,
-				totalOrderCalories INT,
-				stat VARCHAR(50),
-				PRIMARY KEY (id)
-    );
-    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;    
+   
     OPEN cur;
     REPEAT
         FETCH cur INTO currId, avg, currBMR, cartCals;
