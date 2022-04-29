@@ -165,16 +165,14 @@ function Landing({ onLoginSuccessful }) {
   // }
     axios.get('http://localhost:8000/BMIchart').then((res) => {
       console.log("res"+ res.data)
-      
-      for (var i = 0; i < 4; i++) {
+      console.log("res"+ Object.keys(res.data).length)
+      for (var i = 0; i < Object.keys(res.data).length; i++) {
       arr.push(res.data[i].date)
-      console.log("d:" + test_data[i].date)
+      console.log("d:" + res.data[i].date)
+      arr2.push(res.data[i].BMIdata)
+      console.log("bmi:" + res.data[i].BMIdata)
     } 
 
-    for (var i = 0; i < 4; i++) {
-      arr2.push(res.data[i].BMIdata)
-      console.log("bmi:" + test_data[i].BMIdata)
-    } 
       setLabels(arr)
       setBmi_data(arr2)
     })
@@ -548,10 +546,6 @@ function Landing({ onLoginSuccessful }) {
             <h4>We recommend the following exercises that best fit your health record:</h4>
            
            {/* EXERCISE TABLE */}
-           <Button variant="primary" onClick={setBMIData}>
-                  Generate History
-                </Button>
-           
            <table className="table is-striped" id="exerciseTable">
                 <thead>
                     <tr>
@@ -567,7 +561,9 @@ function Landing({ onLoginSuccessful }) {
                     )) }
                 </tbody>
             </table>
-            
+            <Button variant="primary" onClick={setBMIData}>
+                  Generate History
+                </Button>
             <Line
           data={data}
           options={{
