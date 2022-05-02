@@ -82,35 +82,38 @@ Overall our team did a good job on working together in the team with few mishaps
 
 What we did in further details:
 Gisella:
-Did most of the components in the Landing page: 
-Taking a user’s input for their health record and storing it into the database
-Rendering data from Food database into the food table
-Creating a summary of the user’s statistics (whether they are on deficit or surplus based on the foods they chose)
-Generate a user’s health summary (history of their BMI)
-Incorporate stored procedure and trigger to show recommended exercises for the user
-I also helped Heet write the backend APIs for each of these get and post requests in the Landing page
+
+1.Did most of the components in the Landing page: 
+2.Taking a user’s input for their health record and storing it into the database
+3.Rendering data from Food database into the food table
+4.Creating a summary of the user’s statistics (whether they are on deficit or surplus based on the foods they chose)
+5.Generate a user’s health summary (history of their BMI)
+6.Incorporate stored procedure and trigger to show recommended exercises for the user
+7.I also helped Heet write the backend APIs for each of these get and post requests in the Landing page
 
 Brenda:
-Did SignUp and Login and all functionalities within such as: authentication, forgot password, incorrect email and password, routing.
-Implementing the Search feature for displaying the foods on the table.
-Implementing React’s useState and useEffect to get user input before passing it to various api calls on the backend (such as handling checkbox, textfield, etc).
-Display exercise front-end.
-Working with Gisella to call the stored procedure from the front-end.
-Connecting the creative component line chart to the backend by doing some JSON parsing.
+
+1.Did SignUp and Login and all functionalities within such as: authentication, forgot password, incorrect email and password, routing.
+2.Implementing the Search feature for displaying the foods on the table.
+3.Implementing React’s useState and useEffect to get user input before passing it to various api calls on the backend (such as handling checkbox, textfield, etc).
+4.Display exercise front-end.
+5.Working with Gisella to call the stored procedure from the front-end.
+6.Connecting the creative component line chart to the backend by doing some JSON parsing.
 
 Heet:
-Worked on most of the backend
-Set up the connection to the database from the server file
-Implemented and developed SQL queries to retrieve the data from the database
-Set up the backend APIs for the login, signup, and landing page. 
-Implemented the backend for the filters, advanced components, creative components, stored procedures and trigger
-Implemented the get and post calls in the backend and connect them with the frontend
-Helped Brenda to develop the creative component
+1.Worked on most of the backend
+2.Set up the connection to the database from the server file
+3.Implemented and developed SQL queries to retrieve the data from the database
+4.Set up the backend APIs for the login, signup, and landing page. 
+5.Implemented the backend for the filters, advanced components, creative components, stored procedures and trigger
+6.Implemented the get and post calls in the backend and connect them with the frontend
+7.Helped Brenda to develop the creative component
 	
 Ananya:
-Created formulas for calorie calculation
-Implemented front end line chart for creative component
-Created advanced query such as history and search
-Worked with Heet on adding code block for order and delete
-Worked with Heet for registration and login backend
+1.Created formulas for calorie calculation
+2.Implemented front end line chart for creative component
+3.Created advanced query such as history and search
+4.Worked with Heet on adding code block for order and delete
+5.Worked with Heet for registration and login backend
+6.Helped develop cretive component
 
